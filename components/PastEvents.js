@@ -1,4 +1,4 @@
-import { pastEvents, archiveNote } from "@/lib/content";
+import { archiveNote } from "@/lib/content";
 
 /**
  * The archive. Two conversations, which is the real count — two earlier
@@ -14,7 +14,11 @@ import { pastEvents, archiveNote } from "@/lib/content";
 /* Poster grounds, alternating. Cultural event posters, not a uniform card set. */
 const grounds = ["bg-ink text-ivory", "bg-green text-ivory"];
 
-export default function PastEvents() {
+export default function PastEvents({ events = [] }) {
+  // Nothing published yet is a real state: the sync creates drafts, and an
+  // organiser has to publish before anything appears here.
+  if (events.length === 0) return null;
+
   return (
     <section className="ground-ink relative py-(--spacing-section)">
       <div className="shell grid grid-cols-1 gap-x-16 gap-y-12 lg:grid-cols-12">
@@ -23,7 +27,11 @@ export default function PastEvents() {
             The archive
           </p>
           <h2 data-mask className="question mt-6 text-[clamp(2.1rem,4.6vw,3.5rem)]">
-            <span className="block">{archiveNote.heading}</span>
+            <span className="block">
+              {events.length === 1
+                ? "One room so far."
+                : `${events.length} rooms so far.`}
+            </span>
           </h2>
           <p data-reveal="0.05" className="t-dim mt-6 max-w-[30rem]">
             {archiveNote.body}
@@ -32,12 +40,22 @@ export default function PastEvents() {
 
         <div className="lg:col-span-7">
           <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-            {pastEvents.map((event, i) => (
+            {events.map((event, i) => (
               <li key={event.meetupId} data-reveal={i * 0.08}>
                 <article>
                   <div
                     className={`relative flex aspect-[3/4] flex-col justify-between overflow-hidden rounded-xl p-7 ${grounds[i % grounds.length]}`}
                   >
+                    {event.posterPath && (
+                      // Served from Postgres; next/image would only add a hop.
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={event.posterPath}
+                        alt=""
+                        className="absolute inset-0 h-full w-full object-cover opacity-30"
+                      />
+                    )}
+
                     <svg
                       aria-hidden="true"
                       viewBox="0 0 200 200"
@@ -49,24 +67,26 @@ export default function PastEvents() {
 
                     <div className="relative flex items-center justify-between">
                       <span className="eyebrow opacity-60">
-                        No. {String(pastEvents.length - i).padStart(2, "0")}
+                        No. {String(events.length - i).padStart(2, "0")}
                       </span>
-                      <span className="eyebrow opacity-60">{event.time}</span>
+                      <span className="eyebrow opacity-60">{event.venueName}</span>
                     </div>
 
                     <div className="relative">
                       <h3 className="question text-[1.75rem]">{event.title}</h3>
                       <div className="mt-4 h-px w-12 bg-current opacity-40" />
-                      <p className="mt-4 text-[0.875rem] leading-relaxed opacity-70">
-                        &ldquo;{event.question}&rdquo;
-                      </p>
+                      {(event.memorableQuestion || event.subtitle) && (
+                        <p className="mt-4 text-[0.875rem] leading-relaxed opacity-70">
+                          &ldquo;{event.memorableQuestion || event.subtitle}&rdquo;
+                        </p>
+                      )}
                     </div>
 
-                    <p className="eyebrow relative opacity-60">{event.date}</p>
+                    <p className="eyebrow relative opacity-60">{event.shortDate}</p>
                   </div>
 
                   <div className="mt-4 flex items-baseline justify-between gap-4">
-                    <p className="t-faint text-[0.875rem]">{event.venue}</p>
+                    <p className="t-faint text-[0.875rem]">{event.timeLabel}</p>
                     <a
                       href={event.meetupUrl}
                       target="_blank"

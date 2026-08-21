@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { UniqueConstraintError } from "sequelize";
 import { Subscriber } from "@/lib/models/Subscriber";
+import { sendMail, welcomeEmail } from "@/lib/mail";
 
 /**
  * The notify list. Someone asking to be told about the next conversation.
@@ -35,6 +36,8 @@ export async function POST(request) {
     );
   }
 
+  let isNew = true;
+
   try {
     await Subscriber.create({
       email,
@@ -43,13 +46,22 @@ export async function POST(request) {
     });
   } catch (err) {
     // Already on the list — same outcome they asked for.
-    if (!(err instanceof UniqueConstraintError)) {
+    if (err instanceof UniqueConstraintError) {
+      isNew = false;
+    } else {
       console.error("notify: insert failed", err);
       return NextResponse.json(
         { error: "Couldn't save that. Try again in a moment." },
         { status: 503 },
       );
     }
+  }
+
+  // Only new addresses get a welcome, so re-submitting a form doesn't spam
+  // someone. Awaited rather than fired and forgotten: a serverless function can
+  // be frozen the moment it responds, which would drop the mail silently.
+  if (isNew) {
+    await sendMail(email, welcomeEmail(email));
   }
 
   return NextResponse.json({ ok: true });
