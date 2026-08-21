@@ -17,13 +17,13 @@ const drawings = [
 
 export default function Rules() {
   return (
-    <section className="relative py-(--spacing-section)">
+    <section className="ground-ink relative py-(--spacing-section)">
       <div className="shell">
         <div className="max-w-[44rem]">
-          <p data-reveal className="eyebrow text-green">
+          <p data-reveal className="eyebrow t-accent">
             House rules
           </p>
-          <h2 data-mask className="display mt-6 text-[clamp(2.2rem,4.6vw,3.6rem)]">
+          <h2 data-mask className="question mt-6 text-[clamp(2.1rem,4.6vw,3.5rem)]">
             <span className="block">
               A better conversation needs{" "}
               <span className="accent">a different kind of room.</span>
@@ -31,16 +31,16 @@ export default function Rules() {
           </h2>
         </div>
 
-        <ul className="mt-16 grid grid-cols-1 gap-px overflow-hidden rounded-xl border border-ink/12 bg-ink/12 sm:grid-cols-2 lg:grid-cols-4">
+        <ul className="mt-16 grid grid-cols-1 gap-px overflow-hidden rounded-xl border border-ivory/14 bg-ivory/14 sm:grid-cols-2 lg:grid-cols-4">
           {rules.map((rule, i) => (
             <li
               key={rule.title}
               data-reveal={i * 0.07}
-              className="group bg-paper p-8 transition-colors duration-500 hover:bg-sand/35"
+              className="group bg-ink p-8 transition-colors duration-500 hover:bg-ink-deep"
             >
               <svg
                 viewBox="0 0 24 24"
-                className="h-9 w-9 text-green"
+                className="h-9 w-9 text-sage"
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="1.25"
@@ -59,7 +59,7 @@ export default function Rules() {
               </svg>
 
               <h3 className="display mt-10 text-[1.6rem]">{rule.title}</h3>
-              <p className="mt-3 text-[0.9375rem] leading-relaxed text-ink/65">
+              <p className="t-dim mt-3 text-[0.9375rem] leading-relaxed">
                 {rule.body}
               </p>
             </li>

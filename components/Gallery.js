@@ -20,16 +20,18 @@ function Frame({ item, index, priority }) {
   return (
     <figure
       data-reveal={(index % 3) * 0.08}
-      className={`group relative overflow-hidden rounded-xl border border-ink/12 ${spans[item.span]} ${tilts[index % tilts.length]}`}
+      className={`group relative overflow-hidden rounded-xl border border-ivory/12 ${spans[item.span]} ${tilts[index % tilts.length]}`}
     >
-      {item.type === "image" && (
+      {(item.type === "image" || item.type === "poster") && (
         <Image
           src={item.src}
           alt={item.caption}
           fill
           sizes="(max-width: 640px) 100vw, 40vw"
           priority={priority}
-          className="object-cover transition-transform duration-[1.4s] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.06]"
+          className={`transition-transform duration-[1.4s] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04] ${
+            item.type === "poster" ? "bg-ink-deep object-contain p-3" : "object-cover"
+          }`}
         />
       )}
 
@@ -96,20 +98,20 @@ export default function Gallery() {
   }, []);
 
   return (
-    <section ref={root} className="relative py-(--spacing-section)">
+    <section ref={root} className="ground-ink relative py-(--spacing-section)">
       <div className="shell">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div className="max-w-[38rem]">
-            <p data-reveal className="eyebrow text-green">
+            <p data-reveal className="eyebrow t-accent">
               The experience
             </p>
-            <h2 data-mask className="display mt-6 text-[clamp(2.2rem,4.6vw,3.6rem)]">
+            <h2 data-mask className="question mt-6 text-[clamp(2.1rem,4.6vw,3.5rem)]">
               <span className="block">
                 What it actually <span className="accent">looks like.</span>
               </span>
             </h2>
           </div>
-          <p data-reveal="0.05" className="max-w-[22rem] text-[0.9375rem] text-ink/60">
+          <p data-reveal="0.05" className="t-dim max-w-[22rem] text-[0.9375rem]">
             No photographer walking the room. These are taken by whoever
             happened to be holding the one allowed phone.
           </p>

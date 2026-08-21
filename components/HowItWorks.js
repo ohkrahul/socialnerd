@@ -59,9 +59,9 @@ export default function HowItWorks() {
       // Each step lights up as the line reaches it.
       gsap.utils.toArray("[data-step]").forEach((step, i) => {
         gsap.to(step.querySelector("[data-step-dot]"), {
-          backgroundColor: "var(--color-green)",
-          color: "var(--color-ivory)",
-          borderColor: "var(--color-green)",
+          backgroundColor: "var(--color-sage)",
+          color: "var(--color-ink)",
+          borderColor: "var(--color-sage)",
           duration: 0.5,
           scrollTrigger: {
             trigger: root.current,
@@ -78,19 +78,19 @@ export default function HowItWorks() {
     <section
       id="how-it-works"
       ref={root}
-      className="relative bg-sand/40 py-(--spacing-section)"
+      className="ground-ink relative py-(--spacing-section)"
     >
       <div className="shell">
         <div className="max-w-[42rem]">
-          <p data-reveal className="eyebrow text-green">
+          <p data-reveal className="eyebrow t-accent">
             How a conversation works
           </p>
-          <h2 data-mask className="display mt-6 text-[clamp(2.2rem,4.6vw,3.6rem)]">
+          <h2 data-mask className="question mt-6 text-[clamp(2.1rem,4.6vw,3.5rem)]">
             <span className="block">
-              Four hours. One room. <span className="accent">No agenda.</span>
+              Two hours. One room. <span className="accent">No agenda.</span>
             </span>
           </h2>
-          <p data-reveal="0.05" className="mt-6 text-ink/70">
+          <p data-reveal="0.05" className="t-dim mt-6">
             This is not a lecture, a workshop or a networking event. Nobody
             presents. Nobody pitches. There is one question and the people who
             turned up to sit with it.
@@ -113,17 +113,17 @@ export default function HowItWorks() {
             </defs>
             <path
               d="M115 60C240 12 262 108 375 60S512 12 625 60S762 108 885 60"
-              stroke="var(--color-ink)"
+              stroke="var(--color-ivory)"
               strokeWidth="1.5"
               strokeDasharray="1 9"
               strokeLinecap="round"
               vectorEffect="non-scaling-stroke"
-              opacity="0.16"
+              opacity="0.22"
             />
             <g clipPath="url(#journey-reveal)">
               <path
                 d="M115 60C240 12 262 108 375 60S512 12 625 60S762 108 885 60"
-                stroke="var(--color-green)"
+                stroke="var(--color-sage)"
                 strokeWidth="1.5"
                 strokeDasharray="1 9"
                 strokeLinecap="round"
@@ -144,7 +144,7 @@ export default function HowItWorks() {
               <div className="flex items-center gap-4">
                 <span
                   data-step-dot
-                  className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-ink/20 bg-ivory text-ink"
+                  className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-ivory/25 bg-transparent text-ivory"
                 >
                   <svg
                     viewBox="0 0 24 24"
@@ -159,13 +159,13 @@ export default function HowItWorks() {
                     {icons[i]}
                   </svg>
                 </span>
-                <span className="numeral text-2xl text-ink/30">
+                <span className="numeral t-faint text-2xl">
                   0{i + 1}
                 </span>
               </div>
 
               <h3 className="display mt-6 text-[1.65rem]">{step.title}</h3>
-              <p className="mt-3 text-[0.9375rem] leading-relaxed text-ink/65">
+              <p className="t-dim mt-3 text-[0.9375rem] leading-relaxed">
                 {step.body}
               </p>
             </li>

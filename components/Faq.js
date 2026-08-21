@@ -6,9 +6,9 @@ const columns = [faqs.slice(0, half), faqs.slice(half)];
 
 function Item({ item }) {
   return (
-    <details className="faq group border-b border-ink/12">
+    <details className="faq group edge border-b">
       <summary className="flex cursor-pointer list-none items-start justify-between gap-6 py-6 [&::-webkit-details-marker]:hidden">
-        <h3 className="display text-[1.35rem] leading-snug transition-colors duration-300 group-hover:text-green">
+        <h3 className="display text-[1.35rem] leading-snug transition-colors duration-300 group-hover:text-sage">
           {item.q}
         </h3>
 
@@ -18,12 +18,12 @@ function Item({ item }) {
           aria-hidden="true"
           className="relative mt-1.5 flex h-5 w-5 shrink-0 items-center justify-center"
         >
-          <span className="absolute h-px w-4 bg-ink/60" />
-          <span className="plus-v absolute h-4 w-px bg-ink/60" />
+          <span className="absolute h-px w-4 bg-ivory/60" />
+          <span className="plus-v absolute h-4 w-px bg-ivory/60" />
         </span>
       </summary>
 
-      <p className="pb-7 pr-10 text-[0.9375rem] leading-relaxed text-ink/65">
+      <p className="t-dim pb-7 pr-10 text-[0.9375rem] leading-relaxed">
         {item.a}
       </p>
     </details>
@@ -32,16 +32,16 @@ function Item({ item }) {
 
 export default function Faq() {
   return (
-    <section id="faq" className="relative bg-sand/40 py-(--spacing-section)">
+    <section id="faq" className="ground-deep relative py-(--spacing-section)">
       <div className="shell grid grid-cols-1 gap-x-16 gap-y-12 lg:grid-cols-12">
         <div className="lg:col-span-4">
-          <p data-reveal className="eyebrow text-green">
+          <p data-reveal className="eyebrow t-accent">
             Before you book
           </p>
-          <h2 data-mask className="display mt-6 text-[clamp(2.2rem,4vw,3.2rem)]">
+          <h2 data-mask className="question mt-6 text-[clamp(2.1rem,4vw,3.1rem)]">
             <span className="block">Questions people ask.</span>
           </h2>
-          <p data-reveal="0.05" className="mt-6 max-w-[22rem] text-[0.9375rem] text-ink/65">
+          <p data-reveal="0.05" className="t-dim mt-6 max-w-[22rem] text-[0.9375rem]">
             Still unsure about something? Write to us and a human will reply.
           </p>
         </div>

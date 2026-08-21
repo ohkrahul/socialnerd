@@ -44,7 +44,7 @@ const icons = [
 
 function TopicCard({ topic, icon }) {
   return (
-    <article className="group relative flex h-full w-[17rem] flex-col overflow-hidden rounded-xl border border-ivory/12 bg-ink-deep p-6 transition-colors duration-500 hover:border-sage/50 lg:w-auto">
+    <article className="group relative flex h-full w-[17rem] flex-col overflow-hidden rounded-xl border border-ivory/12 bg-ink p-6 transition-colors duration-500 hover:border-sage/50 lg:w-auto">
       <svg
         viewBox="0 0 24 24"
         className="h-6 w-6 text-sage transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:rotate-[14deg]"
@@ -72,13 +72,13 @@ function TopicCard({ topic, icon }) {
 
 export default function Topics() {
   return (
-    <section id="community" className="relative bg-ink py-(--spacing-section) text-ivory">
+    <section id="topics" className="ground-deep relative py-(--spacing-section)">
       <div className="shell">
         <div className="max-w-[46rem]">
-          <p data-reveal className="eyebrow text-sage">
+          <p data-reveal className="eyebrow t-accent">
             Topics we explore
           </p>
-          <h2 data-mask className="display mt-6 text-[clamp(2.2rem,5vw,4rem)]">
+          <h2 data-mask className="question mt-6 text-[clamp(2.1rem,5vw,3.8rem)]">
             <span className="block">
               We talk about the things{" "}
               <span className="accent">small talk avoids.</span>

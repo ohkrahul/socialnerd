@@ -1,4 +1,4 @@
-import { Instrument_Serif, Manrope, JetBrains_Mono } from "next/font/google";
+import { Instrument_Serif, Manrope, Anton } from "next/font/google";
 import "./globals.css";
 import { siteMeta } from "@/lib/content";
 
@@ -16,16 +16,19 @@ const manrope = Manrope({
   variable: "--font-manrope",
 });
 
-const jetbrainsMono = JetBrains_Mono({
+// The room's voice. Heavy condensed caps, matching the community's own event
+// posters. Used only on questions, never on body copy.
+const anton = Anton({
+  weight: "400",
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-jetbrains-mono",
+  variable: "--font-anton",
 });
 
 export const metadata = {
   metadataBase: new URL("https://socialnerds.in"),
   title: {
-    default: "Social Nerds — Less scrolling. More thinking. Better conversations.",
+    default: "Social Nerds — Screen-free conversations in Mumbai",
     template: "%s · Social Nerds",
   },
   description: siteMeta.description,
@@ -35,6 +38,8 @@ export const metadata = {
     "screen-free meetups",
     "emotional intelligence",
     "meaningful conversations Mumbai",
+    "Chembur meetup",
+    "things to do in Mumbai",
   ],
   openGraph: {
     title: "Social Nerds",
@@ -43,13 +48,13 @@ export const metadata = {
     siteName: "Social Nerds",
     locale: "en_IN",
     type: "website",
-    images: [{ url: "/media/meetup-01.jpg", width: 1200, height: 630 }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Social Nerds",
     description: siteMeta.description,
   },
+  alternates: { canonical: "/" },
   robots: { index: true, follow: true },
 };
 
@@ -65,7 +70,7 @@ export default function RootLayout({ children }) {
   return (
     <html
       lang="en-IN"
-      className={`${instrumentSerif.variable} ${manrope.variable} ${jetbrainsMono.variable}`}
+      className={`${instrumentSerif.variable} ${manrope.variable} ${anton.variable}`}
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: noFlash }} />

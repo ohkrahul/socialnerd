@@ -6,7 +6,6 @@ const groups = [
     links: [
       { label: "Instagram", href: social.instagram },
       { label: "Meetup", href: social.meetup },
-      { label: "WhatsApp Community", href: social.whatsapp },
     ],
   },
   {
@@ -21,7 +20,7 @@ const groups = [
 
 export default function Footer() {
   return (
-    <footer className="bg-ink-deep pt-20 pb-32 text-ivory lg:pb-20">
+    <footer className="ground-deep pt-20 pb-32 lg:pb-20">
       <div className="shell">
         <div className="grid grid-cols-1 gap-x-16 gap-y-12 sm:grid-cols-2 lg:grid-cols-12">
           <div className="lg:col-span-5">
@@ -29,8 +28,7 @@ export default function Footer() {
               Social Nerds<span className="text-sage">.</span>
             </p>
             <p className="mt-5 max-w-[24rem] text-[0.9375rem] leading-relaxed text-ivory/55">
-              {siteMeta.tagline} A {siteMeta.city} community for people who would
-              rather ask a better question than win an argument.
+              {siteMeta.description}
             </p>
           </div>
 

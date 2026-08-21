@@ -17,7 +17,7 @@
 
   --font-display: var(--font-instrument-serif), ui-serif, Georgia, serif;
   --font-body: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
+  --font-question: var(--font-anton), "Arial Narrow", sans-serif;
 
   /* Editorial rhythm. Sections breathe; nothing is cramped. */
   --spacing-section: clamp(5rem, 11vw, 11rem);
@@ -36,8 +36,8 @@ html {
 }
 
 body {
-  background-color: var(--color-ivory);
-  color: var(--color-ink);
+  background-color: var(--color-ink);
+  color: var(--color-ivory);
   font-family: var(--font-body);
   font-size: clamp(1rem, 0.97rem + 0.16vw, 1.0625rem);
   line-height: 1.65;
@@ -84,10 +84,9 @@ body {
 }
 
 .eyebrow {
-  font-family: var(--font-mono);
   font-size: 0.6875rem;
-  font-weight: 500;
-  letter-spacing: 0.2em;
+  font-weight: 700;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
 }
 
@@ -116,7 +115,7 @@ body {
 
 .rule {
   height: 1px;
-  background-color: color-mix(in srgb, var(--color-ink) 16%, transparent);
+  background-color: var(--edge, color-mix(in srgb, var(--color-ink) 16%, transparent));
 }
 
 /* ---------------------------------------------------------------
@@ -329,4 +328,157 @@ details[open] .plus-v {
     height: auto;
     opacity: 1;
   }
+}
+
+/* ---------------------------------------------------------------
+   Section grounds.
+
+   The page is ink-dominant: dark is the default and ivory is a
+   deliberate paper insert, not the background everything sits on.
+
+   Each ground declares its own text roles, so a section flips from
+   dark to paper by changing one class and every child follows. That
+   is why sections use .t-dim rather than text-ink/70 — the latter
+   would need editing again the next time a ground changes.
+   --------------------------------------------------------------- */
+.ground-ink,
+.ground-deep {
+  --fg: var(--color-ivory);
+  --fg-dim: color-mix(in srgb, var(--color-ivory) 72%, transparent);
+  --fg-faint: color-mix(in srgb, var(--color-ivory) 45%, transparent);
+  --edge: color-mix(in srgb, var(--color-ivory) 14%, transparent);
+  --accent: var(--color-sage);
+  color: var(--fg);
+}
+.ground-ink {
+  background-color: var(--color-ink);
+}
+.ground-deep {
+  background-color: var(--color-ink-deep);
+}
+
+.ground-paper,
+.ground-sand {
+  --fg: var(--color-ink);
+  --fg-dim: color-mix(in srgb, var(--color-ink) 72%, transparent);
+  --fg-faint: color-mix(in srgb, var(--color-ink) 48%, transparent);
+  --edge: color-mix(in srgb, var(--color-ink) 14%, transparent);
+  --accent: var(--color-green);
+  color: var(--fg);
+}
+.ground-paper {
+  background-color: var(--color-ivory);
+}
+.ground-sand {
+  background-color: var(--color-sand);
+}
+
+.t-fg {
+  color: var(--fg);
+}
+.t-dim {
+  color: var(--fg-dim);
+}
+.t-faint {
+  color: var(--fg-faint);
+}
+.t-accent {
+  color: var(--accent);
+}
+.edge {
+  border-color: var(--edge);
+}
+
+/* ---------------------------------------------------------------
+   The room's voice. Questions are set in heavy condensed caps,
+   matching the community's own event posters. Never used for body
+   copy — the moment it labels something it stops being a question.
+   --------------------------------------------------------------- */
+.question {
+  font-family: var(--font-question);
+  font-weight: 400;
+  line-height: 0.9;
+  letter-spacing: 0.004em;
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+
+/* ---------------------------------------------------------------
+   Marker highlight.
+
+   Drawn from the yellow highlight on the community's Slow Brew
+   poster. The mark sits behind the words and the words are ink, so
+   when the mark strokes across it reads as the highlighter revealing
+   the text rather than passing over it.
+
+   Default is fully drawn: without JS, or with reduced motion, the
+   words are legible immediately. Only html.anim hides it pre-paint.
+   --------------------------------------------------------------- */
+.mark {
+  position: relative;
+  display: inline-block;
+  isolation: isolate;
+}
+
+.mark > .mark-ink {
+  position: relative;
+  z-index: 1;
+  color: var(--color-ink);
+}
+
+.mark > .mark-bg {
+  position: absolute;
+  z-index: 0;
+  /* Bleeds past the glyphs so it reads as a pen stroke, not a text box.
+     Slightly taller at the top because caps sit high in the em box. */
+  inset: 0.1em -0.12em 0.08em -0.12em;
+  background-color: var(--color-sand);
+  transform-origin: left center;
+  /* A stroke is never perfectly rectangular. */
+  border-radius: 2px 5px 3px 4px;
+}
+
+html.anim .mark > .mark-bg {
+  transform: scaleX(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.anim .mark > .mark-bg {
+    transform: none !important;
+  }
+}
+
+/* ---------------------------------------------------------------
+   Phone frame.
+
+   The community shoots vertical Reels on a phone, at events where
+   phones go into a box by the door — and overlays fake iOS
+   notifications on the footage themselves. So the only screen the
+   site shows is framed as a phone, on purpose.
+
+   Aspect is pinned to the real footage (720x1280) so nothing is ever
+   cropped or letterboxed.
+   --------------------------------------------------------------- */
+.phone {
+  position: relative;
+  aspect-ratio: 9 / 16;
+  border-radius: clamp(1.75rem, 3.2vw, 2.75rem);
+  padding: clamp(0.4rem, 0.8vw, 0.7rem);
+  background: linear-gradient(
+    160deg,
+    color-mix(in srgb, var(--color-sand) 55%, var(--color-ink-deep)),
+    var(--color-ink-deep) 45%
+  );
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--color-sand) 28%, transparent),
+    0 45px 80px -50px rgb(0 0 0 / 0.9);
+}
+
+.phone > * {
+  border-radius: calc(clamp(1.75rem, 3.2vw, 2.75rem) - clamp(0.4rem, 0.8vw, 0.7rem));
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  display: block;
 }

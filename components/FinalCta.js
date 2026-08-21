@@ -6,6 +6,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { finalCta } from "@/lib/content";
 import Magnetic from "./Magnetic";
+import NotifyForm from "./NotifyForm";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
@@ -14,6 +15,13 @@ export default function FinalCta() {
 
   useGSAP(
     () => {
+      gsap.to("[data-final-mark]", {
+        scaleX: 1,
+        duration: 0.8,
+        ease: "power2.inOut",
+        scrollTrigger: { trigger: root.current, start: "top 72%", once: true },
+      });
+
       // The illustration draws itself in, stroke by stroke.
       gsap.utils.toArray("[data-draw]").forEach((path, i) => {
         const len = path.getTotalLength();
@@ -36,30 +44,38 @@ export default function FinalCta() {
   return (
     <section
       ref={root}
-      className="grain-drift relative isolate overflow-hidden bg-ink py-(--spacing-section) text-ivory"
+      className="ground-ink grain-drift relative isolate overflow-hidden py-(--spacing-section)"
     >
       <div className="shell grid grid-cols-1 items-center gap-x-16 gap-y-16 lg:grid-cols-12">
         <div className="lg:col-span-7">
-          <h2 className="display text-[clamp(2.6rem,6vw,5rem)]">
-            {finalCta.headlineLines.map((line, i) => (
-              <span key={line} data-mask>
-                <span className={i === 1 ? "accent block" : "block"}>{line}</span>
+          <h2 className="question text-[clamp(2.4rem,6vw,4.8rem)]">
+            <span data-mask>
+              <span className="t-fg block">{finalCta.headline.before}</span>
+            </span>
+            <span data-mask>
+              <span className="mark mt-1 block">
+                <span data-final-mark className="mark-bg" aria-hidden="true" />
+                <span className="mark-ink">{finalCta.headline.marked}</span>
               </span>
-            ))}
+            </span>
           </h2>
 
-          <p data-reveal="0.05" className="mt-9 max-w-[34rem] text-ivory/70">
+          <p data-reveal="0.05" className="t-dim mt-9 max-w-[34rem]">
             {finalCta.body}
           </p>
 
-          <div data-reveal="0.1" className="mt-11 flex flex-wrap items-center gap-4">
-            <Magnetic>
-              <a href={finalCta.primaryCta.href} className="btn btn-ivory">
-                {finalCta.primaryCta.label}
-              </a>
-            </Magnetic>
+          <div data-reveal="0.1" className="mt-11 max-w-[30rem]">
+            <NotifyForm source="final-cta" tone="dark" label="Keep me posted" />
+          </div>
+
+          <div data-reveal="0.15" className="mt-8">
             <Magnetic strength={0.2}>
-              <a href={finalCta.secondaryCta.href} className="btn btn-ghost-light">
+              <a
+                href={finalCta.secondaryCta.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-ghost-light"
+              >
                 {finalCta.secondaryCta.label}
               </a>
             </Magnetic>

@@ -36,18 +36,18 @@ function Column({ data, tone }) {
 
 export default function Audience() {
   return (
-    <section id="about" className="relative py-(--spacing-section)">
+    <section id="about" className="ground-paper relative py-(--spacing-section)">
       <div className="shell">
         <div className="max-w-[40rem]">
-          <p data-reveal className="eyebrow text-green">
+          <p data-reveal className="eyebrow t-accent">
             Honestly, though
           </p>
-          <h2 data-mask className="display mt-6 text-[clamp(2.2rem,4.6vw,3.6rem)]">
+          <h2 data-mask className="question mt-6 text-[clamp(2.1rem,4.6vw,3.5rem)]">
             <span className="block">
               This room is not <span className="accent">for everyone.</span>
             </span>
           </h2>
-          <p data-reveal="0.05" className="mt-6 text-ink/70">
+          <p data-reveal="0.05" className="t-dim mt-6">
             We would rather you read this and decide it is not your thing than
             spend an evening waiting for it to become something else.
           </p>

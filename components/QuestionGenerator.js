@@ -71,7 +71,7 @@ export default function QuestionGenerator() {
   };
 
   return (
-    <section className="relative overflow-hidden py-(--spacing-section)">
+    <section className="ground-paper relative overflow-hidden py-(--spacing-section)">
       {/* Slowly morphing bubble behind the card. CSS keyframes rather than a
           paid MorphSVG licence. */}
       <div
@@ -81,10 +81,10 @@ export default function QuestionGenerator() {
 
       <div className="shell relative">
         <div className="mx-auto max-w-[46rem] text-center">
-          <p data-reveal className="eyebrow text-green">
+          <p data-reveal className="eyebrow t-accent">
             Try one on yourself
           </p>
-          <h2 data-mask className="display mt-6 text-[clamp(2.2rem,4.8vw,3.6rem)]">
+          <h2 data-mask className="question mt-6 text-[clamp(2.1rem,4.8vw,3.5rem)]">
             <span className="block">What would you bring to the table?</span>
           </h2>
         </div>
@@ -130,7 +130,7 @@ export default function QuestionGenerator() {
             </button>
           </div>
 
-          <p className="eyebrow mt-8 text-center text-ink/35">
+          <p className="eyebrow t-faint mt-8 text-center">
             {index + 1} / {questions.length}
           </p>
         </div>

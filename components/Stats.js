@@ -11,7 +11,7 @@ const marks = [
 
 export default function Stats() {
   return (
-    <section className="relative bg-sand/40 py-20">
+    <section className="ground-deep relative py-20">
       <div className="shell">
         <ul className="grid grid-cols-2 gap-y-12 sm:grid-cols-3 lg:grid-cols-5">
           {stats.map((stat, i) => (
@@ -22,7 +22,7 @@ export default function Stats() {
             >
               <svg
                 viewBox="0 0 24 24"
-                className="h-7 w-7 text-green/60"
+                className="h-7 w-7 text-sage"
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="1.3"
@@ -35,7 +35,7 @@ export default function Stats() {
               <span className="numeral mt-5 text-[clamp(2.5rem,4.5vw,3.5rem)]">
                 {stat.value}
               </span>
-              <span className="eyebrow mt-3 text-ink/50">{stat.label}</span>
+              <span className="eyebrow t-faint mt-3">{stat.label}</span>
             </li>
           ))}
         </ul>
