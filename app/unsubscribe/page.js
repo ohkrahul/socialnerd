@@ -21,15 +21,24 @@ export default async function UnsubscribePage({ searchParams }) {
 
   const valid = email && token && verifyUnsubscribeToken(email, token);
   let done = false;
+  let broke = false;
 
   if (valid) {
-    const [count] = await Subscriber.update(
-      { unsubscribedAt: new Date() },
-      { where: { email: String(email).toLowerCase(), unsubscribedAt: null } },
-    );
-    // Already unsubscribed counts as done — the outcome they wanted is true.
-    done = true;
-    if (count === 0) done = true;
+    try {
+      await Subscriber.update(
+        { unsubscribedAt: new Date() },
+        { where: { email: String(email).toLowerCase(), unsubscribedAt: null } },
+      );
+      // Already unsubscribed counts as done — the outcome they wanted is true,
+      // so zero rows updated is still success.
+      done = true;
+    } catch (error) {
+      // Never 500 an unsubscribe page. Someone who wants out and meets a crash
+      // reports spam instead, and that costs far more than an apology and a
+      // fallback address.
+      console.error(`unsubscribe: update failed — ${error.message}`);
+      broke = true;
+    }
   }
 
   return (
@@ -45,6 +54,17 @@ export default async function UnsubscribePage({ searchParams }) {
             <p className="t-dim mt-6">
               No more emails about dates. Nothing else changes — you can still
               RSVP on Meetup any time.
+            </p>
+          </>
+        ) : broke ? (
+          <>
+            <h1 className="question mt-6 text-[clamp(2rem,5vw,3rem)]">
+              Something went wrong on our end.
+            </h1>
+            <p className="t-dim mt-6">
+              Your link was valid — we just couldn&rsquo;t save the change. Reply
+              to any of our emails, or message {siteMeta.whatsapp} on WhatsApp,
+              and we&rsquo;ll take you off by hand today.
             </p>
           </>
         ) : (
