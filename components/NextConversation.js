@@ -51,10 +51,7 @@ function Empty() {
           <h2 data-mask className="question text-[clamp(2rem,4.6vw,3.4rem)]">
             <span className="block">
               No date yet.{" "}
-              <span className="mark">
-                <span className="mark-bg" aria-hidden="true" />
-                <span className="mark-ink">Be first to know.</span>
-              </span>
+              <span className="mark">Be first to know.</span>
             </span>
           </h2>
 

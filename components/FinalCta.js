@@ -15,13 +15,6 @@ export default function FinalCta() {
 
   useGSAP(
     () => {
-      gsap.to("[data-final-mark]", {
-        scaleX: 1,
-        duration: 0.8,
-        ease: "power2.inOut",
-        scrollTrigger: { trigger: root.current, start: "top 72%", once: true },
-      });
-
       // The illustration draws itself in, stroke by stroke.
       gsap.utils.toArray("[data-draw]").forEach((path, i) => {
         const len = path.getTotalLength();
@@ -53,9 +46,8 @@ export default function FinalCta() {
               <span className="t-fg block">{finalCta.headline.before}</span>
             </span>
             <span data-mask>
-              <span className="mark mt-1 block">
-                <span data-final-mark className="mark-bg" aria-hidden="true" />
-                <span className="mark-ink">{finalCta.headline.marked}</span>
+              <span className="mt-1 block">
+                <span className="mark">{finalCta.headline.marked}</span>
               </span>
             </span>
           </h2>
@@ -68,17 +60,33 @@ export default function FinalCta() {
             <NotifyForm source="final-cta" tone="dark" label="Keep me posted" />
           </div>
 
-          <div data-reveal="0.15" className="mt-8">
+          <div data-reveal="0.15" className="mt-8 flex flex-wrap items-center gap-3">
             <Magnetic strength={0.2}>
               <a
-                href={finalCta.secondaryCta.href}
+                href={finalCta.whatsappCta.href}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn btn-ghost-light"
               >
-                {finalCta.secondaryCta.label}
+                <svg
+                  viewBox="0 0 24 24"
+                  className="h-4 w-4"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38c1.45.79 3.08 1.21 4.79 1.21 5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2Zm5.8 14.03c-.24.68-1.4 1.3-1.93 1.35-.53.05-1.02.07-1.75-.2-.43-.16-.99-.35-1.7-.66-2.99-1.29-4.95-4.3-5.1-4.5-.15-.2-1.22-1.62-1.22-3.09s.77-2.19 1.04-2.49c.27-.3.59-.37.79-.37h.56c.18 0 .42-.07.65.5.24.58.81 1.99.88 2.13.07.15.12.32.02.52-.1.2-.15.32-.3.5-.15.17-.31.39-.44.52-.15.15-.3.31-.13.61.17.3.76 1.25 1.63 2.02 1.12.99 2.06 1.3 2.36 1.45.3.15.47.12.65-.07.17-.2.74-.86.94-1.16.2-.3.4-.25.67-.15.27.1 1.71.81 2.01.96.3.15.5.22.57.35.07.12.07.72-.17 1.4Z" />
+                </svg>
+                {finalCta.whatsappCta.label}
               </a>
             </Magnetic>
+            <a
+              href={finalCta.secondaryCta.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn btn-ghost-light"
+            >
+              {finalCta.secondaryCta.label}
+            </a>
           </div>
         </div>
 

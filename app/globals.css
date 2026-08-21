@@ -406,46 +406,28 @@ details[open] .plus-v {
 /* ---------------------------------------------------------------
    Marker highlight.
 
-   Drawn from the yellow highlight on the community's Slow Brew
-   poster. The mark sits behind the words and the words are ink, so
-   when the mark strokes across it reads as the highlighter revealing
-   the text rather than passing over it.
+   Drawn from the yellow highlight on the community's Slow Brew poster.
 
-   Default is fully drawn: without JS, or with reduced motion, the
-   words are legible immediately. Only html.anim hides it pre-paint.
+   One inline span, not a text layer over an animated block. The animated
+   version had two faults: as a block it stretched the sand across the whole
+   container instead of hugging the words, and because the dark text sat on the
+   sand, any instance whose block failed to animate rendered ink on ink and
+   became invisible. That is exactly what happened.
+
+   box-decoration-break: clone means a phrase that wraps gets a highlight per
+   line, like a real marker, rather than one rectangle over the ragged block.
+   Nothing here depends on JavaScript, so it cannot fail to be readable. The
+   line still arrives via the [data-mask] rise, which is motion enough.
    --------------------------------------------------------------- */
 .mark {
-  position: relative;
-  display: inline-block;
-  isolation: isolate;
-}
-
-.mark > .mark-ink {
-  position: relative;
-  z-index: 1;
   color: var(--color-ink);
-}
-
-.mark > .mark-bg {
-  position: absolute;
-  z-index: 0;
-  /* Bleeds past the glyphs so it reads as a pen stroke, not a text box.
-     Slightly taller at the top because caps sit high in the em box. */
-  inset: 0.1em -0.12em 0.08em -0.12em;
   background-color: var(--color-sand);
-  transform-origin: left center;
-  /* A stroke is never perfectly rectangular. */
-  border-radius: 2px 5px 3px 4px;
-}
-
-html.anim .mark > .mark-bg {
-  transform: scaleX(0);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  html.anim .mark > .mark-bg {
-    transform: none !important;
-  }
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+  /* Anton sits tall in its em box and .question runs a line-height under 1, so
+     the padding is what stops the glyphs poking out of the highlight. */
+  padding: 0.06em 0.16em 0.12em;
+  border-radius: 3px 5px 4px 6px;
 }
 
 /* ---------------------------------------------------------------
@@ -456,11 +438,13 @@ html.anim .mark > .mark-bg {
    taller than the space allowed. That keeps the whole frame on
    screen without letterboxing on short viewports.
 
-   Capped at 54rem because the source is 720px wide — stretching it
-   full-bleed would be visibly soft, and soft reads as cheap.
+   Capped at 68rem because the source is only 720px wide. That is
+   already a 1.5x upscale; going full-bleed on a wide monitor would
+   be closer to 2.7x, and soft reads as cheap. Raise the cap if
+   higher-resolution footage turns up.
    --------------------------------------------------------------- */
 .stage {
-  width: min(100%, 54rem, calc(44vh * 16 / 9));
+  width: min(100%, 68rem, calc(58vh * 16 / 9));
   aspect-ratio: 16 / 9;
   margin-inline: auto;
   position: relative;

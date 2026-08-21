@@ -61,12 +61,7 @@ export default function Hero() {
         0,
       )
         .to("[data-hero-mask] > *", { y: 0, duration: 1.2, stagger: 0.1 }, 0.55)
-        .to(
-          "[data-mark-bg]",
-          { scaleX: 1, duration: 0.72, ease: "power2.inOut" },
-          1.25,
-        )
-        .to("[data-hero-fade]", { opacity: 1, y: 0, duration: 1, stagger: 0.09 }, 1.4);
+        .to("[data-hero-fade]", { opacity: 1, y: 0, duration: 1, stagger: 0.09 }, 1.25);
     },
     { scope: root },
   );
@@ -139,9 +134,8 @@ export default function Hero() {
             <span className="block t-fg">{hero.headline.before}</span>
           </span>
           <span data-hero-mask>
-            <span className="mark my-1 block">
-              <span data-mark-bg className="mark-bg" aria-hidden="true" />
-              <span className="mark-ink">{hero.headline.marked}</span>
+            <span className="my-1 block">
+              <span className="mark">{hero.headline.marked}</span>
             </span>
           </span>
           <span data-hero-mask>

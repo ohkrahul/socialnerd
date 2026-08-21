@@ -6,6 +6,7 @@ const groups = [
     links: [
       { label: "Instagram", href: social.instagram },
       { label: "Meetup", href: social.meetup },
+      { label: "WhatsApp", href: social.whatsapp },
     ],
   },
   {
