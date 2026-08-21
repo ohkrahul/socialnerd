@@ -55,7 +55,7 @@ export default function StickyCta({ event = null }) {
             RSVP — ₹{event.feeInr ?? siteMeta.fee}
           </a>
         ) : (
-          <a href="#conversations" className="btn btn-ivory shrink-0 px-6">
+          <a href="#top" className="btn btn-ivory shrink-0 px-6">
             Tell me
           </a>
         )}

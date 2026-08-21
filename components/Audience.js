@@ -36,7 +36,7 @@ function Column({ data, tone }) {
 
 export default function Audience() {
   return (
-    <section id="about" className="ground-paper relative py-(--spacing-section)">
+    <section id="about" className="ground-paper relative pt-(--spacing-section) pb-20">
       <div className="shell">
         <div className="max-w-[40rem]">
           <p data-reveal className="eyebrow t-accent">

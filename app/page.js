@@ -3,11 +3,6 @@ import Nav from "@/components/Nav";
 import Hero from "@/components/Hero";
 import NextConversation from "@/components/NextConversation";
 import HowItWorks from "@/components/HowItWorks";
-import Topics from "@/components/Topics";
-import QuestionGenerator from "@/components/QuestionGenerator";
-import Gallery from "@/components/Gallery";
-import Stats from "@/components/Stats";
-import Rules from "@/components/Rules";
 import PastEvents from "@/components/PastEvents";
 import Audience from "@/components/Audience";
 import Faq from "@/components/Faq";
@@ -18,13 +13,24 @@ import { isSignedIn } from "@/lib/auth";
 import { getArchive, getEventForPreview, getFeaturedEvent } from "@/lib/events";
 
 /**
- * Section grounds alternate ink and ink-deep, with two deliberate ivory
- * inserts — the question generator and the who-this-is-for split. Dark is the
- * page's default and paper is the interruption, not the other way round.
+ * Five sections, down from twelve.
  *
- * Revalidated hourly rather than per-request: events change a few times a
- * month, and every admin action calls revalidatePath("/") anyway, so a publish
- * shows up immediately without making every visitor wait on a query.
+ *   1  Hero              the footage, the question, the one call to action
+ *   2  Next conversation ONLY when one is scheduled — see below
+ *   3  How it works      the four steps, plus what actually gets discussed
+ *   4  Proof             real archive and the five checkable figures
+ *   5  Honest            who it's for, who it isn't, and the questions people ask
+ *   6  Close             one last ask
+ *
+ * Cut: topics as eight hover cards (the names were the information, the
+ * interaction was decoration — now a row inside How It Works), the question
+ * generator, the gallery (four tiles of two clips and a poster, and the hero
+ * carries the real footage now), the house rules (the four steps already say
+ * phones go in the box) and the standalone figures strip (folded into Proof).
+ *
+ * The empty "no date yet" event section is gone too: with nothing scheduled it
+ * repeated the hero's own call to action a screen later. Now the section renders
+ * only when there is a real event to show, and the hero handles the wait.
  */
 export const revalidate = 3600;
 
@@ -32,9 +38,10 @@ export default async function Home({ searchParams }) {
   const { previewEvent } = await searchParams;
 
   // Drafts are visible only to a signed-in admin, and only when asked for.
-  const preview = previewEvent && (await isSignedIn())
-    ? await getEventForPreview(previewEvent)
-    : null;
+  const preview =
+    previewEvent && (await isSignedIn())
+      ? await getEventForPreview(previewEvent)
+      : null;
 
   const [featured, archive] = await Promise.all([
     preview ? Promise.resolve(preview) : getFeaturedEvent(),
@@ -54,13 +61,8 @@ export default async function Home({ searchParams }) {
 
       <main>
         <Hero />
-        <NextConversation event={featured} />
+        {featured && <NextConversation event={featured} />}
         <HowItWorks />
-        <Topics />
-        <QuestionGenerator />
-        <Gallery />
-        <Stats />
-        <Rules />
         <PastEvents events={archive} />
         <Audience />
         <Faq />

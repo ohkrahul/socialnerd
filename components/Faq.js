@@ -8,7 +8,7 @@ function Item({ item }) {
   return (
     <details className="faq group edge border-b">
       <summary className="flex cursor-pointer list-none items-start justify-between gap-6 py-6 [&::-webkit-details-marker]:hidden">
-        <h3 className="display text-[1.35rem] leading-snug transition-colors duration-300 group-hover:text-sage">
+        <h3 className="display text-[1.35rem] leading-snug transition-colors duration-300 group-hover:text-green">
           {item.q}
         </h3>
 
@@ -18,8 +18,8 @@ function Item({ item }) {
           aria-hidden="true"
           className="relative mt-1.5 flex h-5 w-5 shrink-0 items-center justify-center"
         >
-          <span className="absolute h-px w-4 bg-ivory/60" />
-          <span className="plus-v absolute h-4 w-px bg-ivory/60" />
+          <span className="absolute h-px w-4 bg-current opacity-60" />
+          <span className="plus-v absolute h-4 w-px bg-current opacity-60" />
         </span>
       </summary>
 
@@ -32,7 +32,7 @@ function Item({ item }) {
 
 export default function Faq() {
   return (
-    <section id="faq" className="ground-deep relative py-(--spacing-section)">
+    <section id="faq" className="ground-paper relative pb-(--spacing-section)">
       <div className="shell grid grid-cols-1 gap-x-16 gap-y-12 lg:grid-cols-12">
         <div className="lg:col-span-4">
           <p data-reveal className="eyebrow t-accent">

@@ -449,34 +449,30 @@ html.anim .mark > .mark-bg {
 }
 
 /* ---------------------------------------------------------------
-   Phone frame.
+   Video stage.
 
-   The community shoots vertical Reels on a phone, at events where
-   phones go into a box by the door — and overlays fake iOS
-   notifications on the footage themselves. So the only screen the
-   site shows is framed as a phone, on purpose.
+   Width is whichever is smaller: the container, a comfortable
+   reading measure, or the width a 16:9 clip can be before it grows
+   taller than the space allowed. That keeps the whole frame on
+   screen without letterboxing on short viewports.
 
-   Aspect is pinned to the real footage (720x1280) so nothing is ever
-   cropped or letterboxed.
+   Capped at 54rem because the source is 720px wide — stretching it
+   full-bleed would be visibly soft, and soft reads as cheap.
    --------------------------------------------------------------- */
-.phone {
+.stage {
+  width: min(100%, 54rem, calc(44vh * 16 / 9));
+  aspect-ratio: 16 / 9;
+  margin-inline: auto;
   position: relative;
-  aspect-ratio: 9 / 16;
-  border-radius: clamp(1.75rem, 3.2vw, 2.75rem);
-  padding: clamp(0.4rem, 0.8vw, 0.7rem);
-  background: linear-gradient(
-    160deg,
-    color-mix(in srgb, var(--color-sand) 55%, var(--color-ink-deep)),
-    var(--color-ink-deep) 45%
-  );
+  border-radius: clamp(0.75rem, 1.4vw, 1.1rem);
+  overflow: hidden;
+  background-color: var(--color-ink-deep);
   box-shadow:
-    0 0 0 1px color-mix(in srgb, var(--color-sand) 28%, transparent),
-    0 45px 80px -50px rgb(0 0 0 / 0.9);
+    0 0 0 1px color-mix(in srgb, var(--color-sand) 22%, transparent),
+    0 50px 90px -60px rgb(0 0 0 / 0.9);
 }
 
-.phone > * {
-  border-radius: calc(clamp(1.75rem, 3.2vw, 2.75rem) - clamp(0.4rem, 0.8vw, 0.7rem));
-  overflow: hidden;
+.stage > video {
   height: 100%;
   width: 100%;
   object-fit: cover;

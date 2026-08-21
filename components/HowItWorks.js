@@ -4,7 +4,7 @@ import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { steps } from "@/lib/content";
+import { steps, topics } from "@/lib/content";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
@@ -171,6 +171,22 @@ export default function HowItWorks() {
             </li>
           ))}
         </ol>
+
+        {/* What actually comes up. A plain row rather than eight hover cards —
+            the names are the information; the interaction was decoration. */}
+        <div data-reveal="0.1" className="edge mt-20 border-t pt-9">
+          <p className="eyebrow t-faint">Recurring ground</p>
+          <ul className="mt-5 flex flex-wrap gap-x-3 gap-y-3">
+            {topics.map((topic) => (
+              <li
+                key={topic.name}
+                className="edge rounded-full border px-4 py-2 text-[0.875rem] transition-colors duration-400 hover:border-sage hover:text-sage"
+              >
+                {topic.name}
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </section>
   );

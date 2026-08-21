@@ -53,7 +53,7 @@ export default function Nav() {
           </nav>
 
           <div className="flex items-center gap-3">
-            <a href="#conversations" className="btn btn-ivory hidden md:inline-flex">
+            <a href="#top" className="btn btn-ivory hidden md:inline-flex">
               Join the Next Conversation
             </a>
             <button
@@ -107,7 +107,7 @@ export default function Nav() {
           </nav>
 
           <a
-            href="#conversations"
+            href="#top"
             onClick={() => setOpen(false)}
             className="btn btn-ivory mt-auto justify-center"
           >
