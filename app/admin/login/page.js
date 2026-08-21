@@ -10,7 +10,7 @@ export default function LoginPage() {
     <div className="shell flex min-h-svh items-center justify-center py-16">
       <div className="w-full max-w-[26rem]">
         <p className="eyebrow t-accent">Social Nerds</p>
-        <h1 className="question mt-5 text-[2.4rem]">Admin</h1>
+        <h1 className="question mt-5 text-[clamp(1.6rem,7vw,2.4rem)]">Admin</h1>
         <p className="t-dim mt-4 text-[0.9375rem]">
           One password, shared by the organisers.
         </p>

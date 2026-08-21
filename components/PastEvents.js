@@ -1,4 +1,4 @@
-import { archiveNote, stats } from "@/lib/content";
+import { archiveNote, stats as defaultStats } from "@/lib/content";
 
 /**
  * Proof, in one section: the conversations that actually happened, and the five
@@ -94,7 +94,11 @@ function Poster({ event, index, total }) {
   );
 }
 
-export default function PastEvents({ events = [] }) {
+export default function PastEvents({
+  events = [],
+  stats = defaultStats,
+  archiveNote: note = archiveNote.body,
+}) {
   // Nothing published yet is a real state — sync creates drafts and an organiser
   // has to publish. The figures still stand on their own, so only the archive
   // half is conditional.
@@ -120,7 +124,7 @@ export default function PastEvents({ events = [] }) {
               </span>
             </h2>
             <p data-reveal="0.05" className="t-dim mt-6 max-w-[30rem]">
-              {archiveNote.body}
+              {note}
             </p>
           </div>
 

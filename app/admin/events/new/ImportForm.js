@@ -13,7 +13,7 @@ export default function ImportForm() {
         ← Events
       </Link>
 
-      <h1 className="question mt-6 text-[2.4rem]">Import from Meetup</h1>
+      <h1 className="question mt-6 text-[clamp(1.6rem,7vw,2.4rem)]">Import from Meetup</h1>
       <p className="t-dim mt-4">
         Paste the event URL. Title, date, time, venue, address and the poster are
         read straight off the listing — you only add what Meetup can&rsquo;t know.

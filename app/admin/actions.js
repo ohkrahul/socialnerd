@@ -24,6 +24,9 @@ import {
   destroy,
   uploadSignature,
 } from "@/lib/cloudinary";
+import { Setting } from "@/lib/models/Setting";
+import { IgnoredEvent } from "@/lib/models/IgnoredEvent";
+import { FIELDS } from "@/lib/settings";
 
 /**
  * Every admin mutation lives here as a server action.
@@ -79,6 +82,10 @@ export async function importFromMeetup(_state, formData) {
   } catch (error) {
     return { error: error.message };
   }
+
+  // Importing it by hand overrides an earlier delete — that is the whole point
+  // of pasting the URL again.
+  await IgnoredEvent.destroy({ where: { meetupId: parsed.meetupId } });
 
   const existing = await Event.findOne({ where: { meetupId: parsed.meetupId } });
   if (existing) {
@@ -220,7 +227,18 @@ export async function duplicateEvent(id) {
 
 export async function deleteEvent(id) {
   await requireAdmin();
-  await Event.destroy({ where: { id } });
+
+  const event = await Event.findByPk(id);
+  if (event) {
+    /**
+     * Remember the id before dropping the row. Meetup still lists this event, so
+     * without this the nightly sync recreates it as a draft and the delete
+     * quietly undoes itself overnight.
+     */
+    await IgnoredEvent.upsert({ meetupId: event.meetupId, title: event.title });
+    await event.destroy();
+  }
+
   revalidatePath("/admin");
   revalidatePath("/");
   redirect("/admin");
@@ -407,4 +425,43 @@ export async function deleteGalleryItem(id) {
 
   revalidatePath("/admin/gallery");
   revalidatePath("/");
+}
+
+/* ------------------------------------------------------------------ *
+ * Settings
+ * ------------------------------------------------------------------ */
+
+/**
+ * Saves the editable figures. Only keys declared in FIELDS are written, so a
+ * crafted form cannot introduce a row this app will never read.
+ *
+ * A field submitted empty deletes its override rather than storing "", which
+ * puts the content.js default back rather than blanking the site.
+ */
+export async function saveSettings(_state, formData) {
+  await requireAdmin();
+
+  for (const field of FIELDS) {
+    const raw = String(formData.get(field.key) ?? "").trim();
+
+    if (raw === "") {
+      await Setting.destroy({ where: { key: field.key } });
+      continue;
+    }
+
+    if (field.type === "number") {
+      const n = Number(raw);
+      if (!Number.isFinite(n) || n < 0) {
+        return { error: `${field.label} needs to be a number, not "${raw}".` };
+      }
+      await Setting.upsert({ key: field.key, value: String(Math.floor(n)) });
+      continue;
+    }
+
+    await Setting.upsert({ key: field.key, value: raw });
+  }
+
+  revalidatePath("/admin/settings");
+  revalidatePath("/");
+  return { ok: "Saved. The homepage is updated." };
 }

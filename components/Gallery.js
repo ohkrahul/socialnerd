@@ -22,11 +22,9 @@ import PosterRail from "./PosterRail";
  * landscape clips are 16:9 once their letterboxing is stripped, the portrait
  * ones are 9:16, and forcing either into a common tile crops the people out.
  *
- * That mix is why this is a column layout rather than a grid. A 9:16 tile is
- * three times the height of a 16:9 tile at the same width, so in a row-based
- * grid the short ones leave a hole beneath them and the section reads as a
- * cross. Columns flow each tile under the last one in its column, so ragged
- * heights cost nothing and no tile can leave a gap.
+ * Two columns wide, so a 16:9 clip gets close to half the measure rather than a
+ * third of it. If portrait uploads ever mix in here, items-start lets the rows
+ * stagger instead of stretching the short ones.
  */
 const spans = {
   tall: "aspect-[9/16]",
@@ -52,7 +50,7 @@ function Tile({ item, index }) {
   return (
     <figure
       data-reveal={(index % 3) * 0.08}
-      className={`group relative mb-4 break-inside-avoid overflow-hidden rounded-xl border border-ivory/12 sm:mb-5 ${spans[item.span]} ${tilts[index % tilts.length]}`}
+      className={`group relative overflow-hidden rounded-xl border border-ivory/12 ${spans[item.span]} ${tilts[index % tilts.length]}`}
     >
       {item.type === "video" ? (
         <video
@@ -141,7 +139,13 @@ export default function Gallery({ items = [], posters = [] }) {
           </p>
         </div>
 
-        <div className="mt-16 gap-4 [column-fill:balance] sm:gap-5 columns-1 sm:columns-2 lg:columns-3">
+        {/* A two-column grid, not multicol. Columns were here to absorb wildly
+            different tile heights, but with a handful of equal-height items the
+            browser distributed them 2+2+0 and left a third of the row empty.
+            Every clip in this grid is 16:9 now, so two wide columns fill the
+            measure and each tile gets real size. items-start keeps it honest if
+            a portrait upload lands here later. */}
+        <div className="mt-16 grid grid-cols-1 items-start gap-5 sm:grid-cols-2 sm:gap-6">
           {items.map((item, i) => (
             <Tile key={item.caption} item={item} index={i} />
           ))}

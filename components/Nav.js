@@ -9,7 +9,7 @@ import { nav, siteMeta } from "@/lib/content";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
-export default function Nav() {
+export default function Nav({ members = siteMeta.members }) {
   const root = useRef(null);
   const [open, setOpen] = useState(false);
   const [solid, setSolid] = useState(false);
@@ -72,7 +72,7 @@ export default function Nav() {
               className="hidden items-center gap-2 rounded-full border border-ivory/20 px-3.5 py-2 text-[0.8125rem] text-ivory/75 transition-colors hover:border-ivory/45 hover:text-ivory xl:inline-flex"
             >
               <span className="h-1.5 w-1.5 rounded-full bg-sage" />
-              <span className="font-extrabold text-ivory">{siteMeta.members}</span>
+              <span className="font-extrabold text-ivory">{members}</span>
               members
             </a>
             <a href="#top" className="btn btn-ivory hidden md:inline-flex">
@@ -138,7 +138,7 @@ export default function Nav() {
           </nav>
 
           <p className="eyebrow t-faint mt-auto mb-4 text-center">
-            <span className="font-extrabold text-ivory">{siteMeta.members}</span>{" "}
+            <span className="font-extrabold text-ivory">{members}</span>{" "}
             members · ₹{siteMeta.fee} a seat
           </p>
           <a

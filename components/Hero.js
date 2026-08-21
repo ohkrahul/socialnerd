@@ -21,7 +21,7 @@ gsap.registerPlugin(useGSAP);
  * control is what makes it a person talking to you. It starts muted because no
  * browser will autoplay otherwise.
  */
-export default function Hero() {
+export default function Hero({ indicators = hero.indicators }) {
   const root = useRef(null);
   const video = useRef(null);
   const [muted, setMuted] = useState(true);
@@ -159,7 +159,7 @@ export default function Hero() {
           data-hero-fade
           className="edge flex flex-wrap items-center justify-center gap-x-5 gap-y-3 border-t pt-6"
         >
-          {hero.indicators.map((item, i) => (
+          {indicators.map((item, i) => (
             <li
               key={item.label}
               className={`eyebrow flex items-center gap-5 ${

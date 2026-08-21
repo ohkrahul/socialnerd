@@ -1,6 +1,5 @@
-import Link from "next/link";
 import { isSignedIn } from "@/lib/auth";
-import { signOut } from "./actions";
+import AdminNav from "./AdminNav";
 
 export const metadata = {
   title: "Admin",
@@ -14,6 +13,9 @@ export const metadata = {
  *
  * The login page renders without the chrome, so it opts out via isSignedIn
  * rather than being nested somewhere else.
+ *
+ * The header is a client component because the mobile menu needs open state and
+ * the current path to mark itself; everything else here stays on the server.
  */
 export default async function AdminLayout({ children }) {
   const signedIn = await isSignedIn();
@@ -25,36 +27,10 @@ export default async function AdminLayout({ children }) {
   return (
     <div className="ground-ink min-h-svh">
       <header className="edge border-b">
-        <div className="shell flex flex-wrap items-center justify-between gap-4 py-5">
-          <div className="flex items-baseline gap-6">
-            <Link href="/admin" className="display text-xl">
-              Social Nerds<span className="text-sage">.</span>
-            </Link>
-            <nav className="flex gap-5 text-[0.875rem]" aria-label="Admin">
-              <Link href="/admin" className="t-dim hover:text-ivory">
-                Events
-              </Link>
-              <Link href="/admin/gallery" className="t-dim hover:text-ivory">
-                Gallery
-              </Link>
-              <Link href="/admin/subscribers" className="t-dim hover:text-ivory">
-                Notify list
-              </Link>
-              <Link href="/" className="t-dim hover:text-ivory">
-                View site ↗
-              </Link>
-            </nav>
-          </div>
-
-          <form action={signOut}>
-            <button type="submit" className="eyebrow t-faint hover:text-ivory">
-              Sign out
-            </button>
-          </form>
-        </div>
+        <AdminNav />
       </header>
 
-      <main className="shell py-12">{children}</main>
+      <main className="shell py-8 lg:py-12">{children}</main>
     </div>
   );
 }

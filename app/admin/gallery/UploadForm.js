@@ -64,7 +64,7 @@ export default function UploadForm() {
 
   return (
     <div className="card p-6 text-ink">
-      <h2 className="display text-[1.5rem]">Add media</h2>
+      <h2 className="display text-[clamp(1.2rem,4.5vw,1.5rem)]">Add media</h2>
 
       {!uploaded ? (
         <form onSubmit={pushToCloudinary} className="mt-5 flex flex-col gap-4">
@@ -75,13 +75,13 @@ export default function UploadForm() {
               type="file"
               accept="image/*,video/*"
               required
-              className="rounded-lg border border-ink/20 p-2.5"
+              className="w-full rounded-lg border border-ink/20 p-2.5"
             />
           </label>
 
           <label className="flex flex-col gap-1.5 text-[0.875rem]">
             <span className="font-semibold">What is it?</span>
-            <select ref={kindRef} className="rounded-lg border border-ink/20 p-2.5">
+            <select ref={kindRef} className="w-full rounded-lg border border-ink/20 p-2.5">
               <option value="footage">Footage — a real clip or photo of a room</option>
               <option value="poster">Poster — event artwork or a graphic</option>
             </select>
@@ -115,7 +115,7 @@ export default function UploadForm() {
               name="caption"
               required
               placeholder="Quote the clip's own on-screen text, or say what is in frame"
-              className="rounded-lg border border-ink/20 p-2.5"
+              className="w-full rounded-lg border border-ink/20 p-2.5"
             />
             <span className="text-ink/60">This is the alt text too, so describe it honestly.</span>
           </label>
@@ -125,7 +125,7 @@ export default function UploadForm() {
             <input
               name="meta"
               placeholder="18 July · Slow Brew, Chembur"
-              className="rounded-lg border border-ink/20 p-2.5"
+              className="w-full rounded-lg border border-ink/20 p-2.5"
             />
           </label>
 

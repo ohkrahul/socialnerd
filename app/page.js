@@ -15,6 +15,7 @@ import WhatsappFloat from "@/components/WhatsappFloat";
 import { isSignedIn } from "@/lib/auth";
 import { getArchive, getEventForPreview, getFeaturedEvent } from "@/lib/events";
 import { getGallery, getPosters } from "@/lib/gallery";
+import { getSiteSettings } from "@/lib/settings";
 
 /**
  * Seven blocks, down from twelve, and weighted towards images over text.
@@ -48,17 +49,18 @@ export default async function Home({ searchParams }) {
       ? await getEventForPreview(previewEvent)
       : null;
 
-  const [featured, archive, galleryItems, posterItems] = await Promise.all([
+  const [featured, archive, galleryItems, posterItems, settings] = await Promise.all([
     preview ? Promise.resolve(preview) : getFeaturedEvent(),
     getArchive(),
     getGallery(),
     getPosters(),
+    getSiteSettings(),
   ]);
 
   return (
     <>
       <Motion />
-      <Nav />
+      <Nav members={settings.members} />
 
       {preview && (
         <p className="fixed inset-x-0 top-0 z-[80] bg-sand py-2 text-center text-[0.8125rem] font-semibold text-ink">
@@ -67,12 +69,16 @@ export default async function Home({ searchParams }) {
       )}
 
       <main>
-        <Hero />
+        <Hero indicators={settings.heroIndicators} />
         {featured && <NextConversation event={featured} />}
         <HowItWorks />
         <Gallery items={galleryItems} posters={posterItems} />
         <Rules />
-        <PastEvents events={archive} />
+        <PastEvents
+          events={archive}
+          stats={settings.stats}
+          archiveNote={settings.archiveNote}
+        />
         <Audience />
         <Faq />
         <FinalCta />

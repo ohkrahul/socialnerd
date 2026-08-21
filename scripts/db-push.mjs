@@ -11,6 +11,8 @@ import { sequelize } from "../lib/db.js";
 import "../lib/models/Subscriber.js";
 import "../lib/models/Event.js";
 import "../lib/models/GalleryItem.js";
+import "../lib/models/Setting.js";
+import "../lib/models/IgnoredEvent.js";
 
 const [, , ...args] = process.argv;
 

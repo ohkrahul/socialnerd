@@ -5,6 +5,7 @@ import {
   setGalleryStatus,
   updateGalleryItem,
 } from "../actions";
+import ConfirmSubmit from "../ConfirmSubmit";
 
 /**
  * One row per item. Plain forms with server actions rather than a client-side
@@ -29,19 +30,19 @@ export default function ItemRow({ item }) {
           name="caption"
           defaultValue={item.caption ?? ""}
           placeholder="Caption (also the alt text)"
-          className="rounded-lg border border-ink/20 p-2 text-[0.875rem]"
+          className="w-full rounded-lg border border-ink/20 p-2 text-[0.875rem]"
         />
         <input
           name="meta"
           defaultValue={item.meta ?? ""}
           placeholder="Second line (optional)"
-          className="rounded-lg border border-ink/20 p-2 text-[0.875rem]"
+          className="w-full rounded-lg border border-ink/20 p-2 text-[0.875rem]"
         />
         <div className="flex flex-wrap items-center gap-2">
           <select
             name="span"
             defaultValue={item.span}
-            className="rounded-lg border border-ink/20 p-2 text-[0.8125rem]"
+            className="w-full rounded-lg border border-ink/20 p-2 text-[0.8125rem] sm:w-auto"
           >
             <option value="normal">Normal (4:3)</option>
             <option value="wide">Wide (16:9)</option>
@@ -50,7 +51,7 @@ export default function ItemRow({ item }) {
           <select
             name="kind"
             defaultValue={item.kind}
-            className="rounded-lg border border-ink/20 p-2 text-[0.8125rem]"
+            className="w-full rounded-lg border border-ink/20 p-2 text-[0.8125rem] sm:w-auto"
           >
             <option value="footage">Footage</option>
             <option value="poster">Poster</option>
@@ -87,13 +88,13 @@ export default function ItemRow({ item }) {
           </button>
         </form>
 
+        {/* Removes the Cloudinary asset as well as the row, so it arms first. */}
         <form action={deleteGalleryItem.bind(null, item.id)}>
-          <button
-            type="submit"
+          <ConfirmSubmit
             className="btn btn-ghost px-3 py-2 text-[0.8125rem] text-red-700"
-          >
-            Delete
-          </button>
+            armedClassName="btn btn-ghost border-red-700 bg-red-700/10 px-3 py-2 text-[0.8125rem] text-red-800"
+            confirmLabel="Delete for good"
+          />
         </form>
       </div>
     </li>

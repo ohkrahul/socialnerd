@@ -102,7 +102,7 @@ export default function EventForm({ event }) {
     <div className="mt-6 grid grid-cols-1 gap-x-14 gap-y-10 lg:grid-cols-12">
       {/* -------- editorial: the admin owns all of this -------- */}
       <div className="lg:col-span-7">
-        <h1 className="question text-[2.2rem]">{event.title}</h1>
+        <h1 className="question text-[clamp(1.5rem,6.5vw,2.2rem)]">{event.title}</h1>
         <p className="t-dim mt-3 text-[0.9375rem]">
           Everything below is yours. The panel on the right comes from Meetup and
           is overwritten on every sync.

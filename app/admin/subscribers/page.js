@@ -35,7 +35,7 @@ export default async function SubscribersPage() {
       <div className="flex flex-wrap items-end justify-between gap-6">
         <div>
           <p className="eyebrow t-accent">Notify list</p>
-          <h1 className="question mt-4 text-[2.4rem]">
+          <h1 className="question mt-4 text-[clamp(1.6rem,7vw,2.4rem)]">
             {people.length} {people.length === 1 ? "person" : "people"}
           </h1>
           <p className="t-dim mt-3 text-[0.9375rem]">
@@ -60,39 +60,58 @@ export default async function SubscribersPage() {
 
       {people.length === 0 ? (
         <div className="edge mt-10 rounded-xl border border-dashed p-12 text-center">
-          <p className="display text-[1.6rem]">Nobody on the list yet.</p>
+          <p className="display text-[clamp(1.25rem,5vw,1.6rem)]">Nobody on the list yet.</p>
           <p className="t-dim mx-auto mt-3 max-w-[28rem] text-[0.9375rem]">
             The hero, the closing section and the &ldquo;no date yet&rdquo; card all
             feed this list.
           </p>
         </div>
       ) : (
-        <div className="edge mt-10 overflow-x-auto rounded-xl border">
-          <table className="w-full min-w-[34rem] text-left text-[0.875rem]">
-            <thead>
-              <tr className="edge border-b">
-                {["Email", "Came from", "Joined"].map((h) => (
-                  <th key={h} className="eyebrow t-faint px-5 py-4 font-bold">
-                    {h}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {people.map((person) => (
-                <tr key={person.id} className="edge border-b last:border-b-0">
-                  <td className="t-fg px-5 py-3.5">{person.email}</td>
-                  <td className="t-dim px-5 py-3.5">
-                    {SOURCE[person.source] ?? person.source}
-                  </td>
-                  <td className="t-faint px-5 py-3.5 whitespace-nowrap">
-                    {IST.format(new Date(person.createdAt))}
-                  </td>
+        <>
+          {/* Cards below sm. Email addresses are long enough that three columns
+              in 360px means either a squeeze or a sideways scroll for every
+              row. */}
+          <ul className="mt-8 flex flex-col gap-2.5 sm:hidden">
+            {people.map((person) => (
+              <li key={person.id} className="edge rounded-xl border p-4">
+                <p className="t-fg text-[0.9375rem] font-medium break-all">
+                  {person.email}
+                </p>
+                <p className="t-faint mt-2 text-[0.8125rem]">
+                  {SOURCE[person.source] ?? person.source} ·{" "}
+                  {IST.format(new Date(person.createdAt))}
+                </p>
+              </li>
+            ))}
+          </ul>
+
+          <div className="edge mt-10 hidden overflow-x-auto rounded-xl border sm:block">
+            <table className="w-full min-w-[34rem] text-left text-[0.875rem]">
+              <thead>
+                <tr className="edge border-b">
+                  {["Email", "Came from", "Joined"].map((h) => (
+                    <th key={h} className="eyebrow t-faint px-5 py-4 font-bold">
+                      {h}
+                    </th>
+                  ))}
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody>
+                {people.map((person) => (
+                  <tr key={person.id} className="edge border-b last:border-b-0">
+                    <td className="t-fg px-5 py-3.5">{person.email}</td>
+                    <td className="t-dim px-5 py-3.5">
+                      {SOURCE[person.source] ?? person.source}
+                    </td>
+                    <td className="t-faint px-5 py-3.5 whitespace-nowrap">
+                      {IST.format(new Date(person.createdAt))}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </>
       )}
 
       {people.length === 500 && (

@@ -17,7 +17,7 @@ export default async function GalleryAdmin() {
   return (
     <div className="flex flex-col gap-10">
       <div>
-        <h1 className="question text-[2rem]">Gallery</h1>
+        <h1 className="question text-[clamp(1.45rem,6vw,2rem)]">Gallery</h1>
         <p className="t-dim mt-2 max-w-[42rem] text-[0.9375rem]">
           Anything published here replaces the built-in list on the homepage. With
           nothing published, the site falls back to the files in <code>public/</code>,
