@@ -1,0 +1,47 @@
+{
+  "images": [
+    "/media/shot-01.webp",
+    "/media/shot-02.webp",
+    "/media/shot-03.webp",
+    "/media/shot-04.webp",
+    "/media/shot-05.webp",
+    "/media/shot-06.webp"
+  ],
+  "videos": [
+    {
+      "src": "/video/clip-01.mp4",
+      "poster": "/media/clip-01-poster.jpg",
+      "orientation": "portrait"
+    },
+    {
+      "src": "/video/clip-02.mp4",
+      "poster": "/media/clip-02-poster.jpg",
+      "orientation": "landscape"
+    },
+    {
+      "src": "/video/clip-03.mp4",
+      "poster": "/media/clip-03-poster.jpg",
+      "orientation": "landscape"
+    },
+    {
+      "src": "/video/clip-04.mp4",
+      "poster": "/media/clip-04-poster.jpg",
+      "orientation": "portrait"
+    },
+    {
+      "src": "/video/clip-05.mp4",
+      "poster": "/media/clip-05-poster.jpg",
+      "orientation": "landscape"
+    },
+    {
+      "src": "/video/clip-06.mp4",
+      "poster": "/media/clip-06-poster.jpg",
+      "orientation": "portrait"
+    },
+    {
+      "src": "/video/clip-07.mp4",
+      "poster": "/media/clip-07-poster.jpg",
+      "orientation": "landscape"
+    }
+  ]
+}
