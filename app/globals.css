@@ -11,6 +11,9 @@
   --color-ink-deep: #1e2b22;
   --color-green: #3e6b4a;
   --color-sage: #6f9a73;
+  /* Sage reads at only 3.71:1 on --color-ink. This lift clears AA on both
+     dark grounds (4.61 on ink, 5.72 on ink-deep) and is the accent they use. */
+  --color-sage-lift: #88aa86;
   --color-ivory: #f9f1df;
   --color-sand: #e2cfa9;
   --color-paper: #fefaf0;
@@ -97,10 +100,12 @@ body {
   line-height: 1;
 }
 
-/* Sage italic is the emphasis voice, used only on key phrases. */
+/* Italic is the emphasis voice, used only on key phrases. The colour follows
+   the ground rather than pinning sage — sage on ivory is 2.85:1, which is what
+   made "for everyone." wash out. Every ground declares a passing --accent. */
 .accent {
   font-style: italic;
-  color: var(--color-sage);
+  color: var(--accent);
 }
 
 /* ---------------------------------------------------------------
@@ -345,9 +350,10 @@ details[open] .plus-v {
 .ground-deep {
   --fg: var(--color-ivory);
   --fg-dim: color-mix(in srgb, var(--color-ivory) 72%, transparent);
-  --fg-faint: color-mix(in srgb, var(--color-ivory) 45%, transparent);
+  /* 45% measured 3.86:1 on ink-deep; 58% clears AA on both dark grounds. */
+  --fg-faint: color-mix(in srgb, var(--color-ivory) 58%, transparent);
   --edge: color-mix(in srgb, var(--color-ivory) 14%, transparent);
-  --accent: var(--color-sage);
+  --accent: var(--color-sage-lift);
   color: var(--fg);
 }
 .ground-ink {
@@ -424,10 +430,20 @@ details[open] .plus-v {
   background-color: var(--color-sand);
   box-decoration-break: clone;
   -webkit-box-decoration-break: clone;
-  /* Anton sits tall in its em box and .question runs a line-height under 1, so
-     the padding is what stops the glyphs poking out of the highlight. */
-  padding: 0.06em 0.16em 0.12em;
+  /* Horizontal padding only. Vertical padding grew this inline box past the
+     0.9em line box of .question, so the highlights on adjacent lines overlapped
+     and the lower one painted over the upper one's glyphs — ink on ink exactly
+     where the boxes met. The height needed to clear Anton's tall em box is set
+     on the heading instead, where it cannot collide with anything. */
+  padding-inline: 0.16em;
   border-radius: 3px 5px 4px 6px;
+}
+
+/* Anton's content box is taller than one em, so a heading carrying a highlight
+   needs a line-height above 1 or adjacent lines' backgrounds collide. Only
+   headings that actually hold a mark pay for the looser rhythm. */
+.question:has(.mark) {
+  line-height: 1.14;
 }
 
 /* ---------------------------------------------------------------

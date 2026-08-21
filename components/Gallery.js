@@ -8,12 +8,13 @@ import { gallery } from "@/lib/content";
  * Masonry gallery. Uneven spans on purpose — a tidy grid reads as a template,
  * and the brief asks for organic and imperfect.
  *
- * Three kinds of tile, deliberately distinguishable:
+ * The community's own media only. Stills are frames from their footage, the
+ * clips are theirs, the poster is theirs. No illustration: a drawing sitting
+ * next to documentary footage muddies which is a record and which is not.
  *
- *   video   the community's own footage. Documentary.
- *   poster  their own event artwork, shown as artwork rather than as a photo.
- *   art     generated illustration. Obviously drawn, so it cannot be mistaken
- *           for a record of something that happened.
+ *   image   a real frame from a real evening
+ *   video   their own clip
+ *   poster  their own event artwork, shown as artwork rather than as a photo
  */
 
 const spans = {
@@ -34,8 +35,6 @@ const zoom =
   "transition-transform duration-[1.4s] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.05]";
 
 function Tile({ item, index }) {
-  const isArt = item.type === "art";
-
   return (
     <figure
       data-reveal={(index % 3) * 0.08}
@@ -45,6 +44,7 @@ function Tile({ item, index }) {
         <video
           data-lazy-video
           data-src={item.src}
+          poster={item.poster}
           muted
           loop
           playsInline
@@ -70,12 +70,6 @@ function Tile({ item, index }) {
 
       <figcaption className="absolute inset-x-0 bottom-0 bg-linear-to-t from-ink/85 to-transparent p-5 pt-14 text-[0.8125rem] font-medium text-ivory/90">
         {item.caption}
-        {isArt && (
-          // Said plainly rather than left ambiguous next to real footage.
-          <span className="t-faint mt-1 block text-[0.6875rem] font-normal">
-            Illustration
-          </span>
-        )}
       </figcaption>
     </figure>
   );
@@ -123,8 +117,9 @@ export default function Gallery() {
             </h2>
           </div>
           <p data-reveal="0.05" className="t-dim max-w-[22rem] text-[0.9375rem]">
-            No photographer walking the room. The clips are ours, taken on the one
-            allowed phone; the drawings are drawings.
+            No photographer walking the room. Every frame here is from the one
+            allowed phone, which is why it looks like a Saturday evening rather
+            than a brochure.
           </p>
         </div>
 

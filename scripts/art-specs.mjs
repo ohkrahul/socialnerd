@@ -37,23 +37,9 @@ export const ART = [
       "Eight empty cafe chairs arranged in a neat circle on a tiled floor, seen from directly overhead, one chair turned slightly outward as if someone just stood up. No people. Strong graphic circle composition.",
   },
 
-  /* ---------------- Gallery ---------------- */
-  {
-    slug: "room-circle",
-    aspect: "16:9",
-    prompt:
-      "The interior of a warm Mumbai cafe in the evening, chairs pulled into a loose circle in the middle of the room, empty cups and a notebook left on a side table, wicker furniture, potted plants, wall lamps glowing. Completely empty of people. Wide establishing view.",
-  },
-  {
-    slug: "gallery-notebook",
-    aspect: "1:1",
-    prompt:
-      "An open notebook lying on a wooden cafe table with a pen resting across it, the pages blank and unmarked, a cup of coffee and a pair of glasses beside it. Close overhead view, warm and lived-in.",
-  },
-  {
-    slug: "gallery-cups",
-    aspect: "4:3",
-    prompt:
-      "Two coffee cups on a small round cafe table, close together, faint steam rising, two empty chairs pulled up on either side. Seen from table height. No people. Intimate and quiet.",
-  },
+  /* ---------------- Gallery ----------------
+     Removed. The gallery shows the community's own photos and clips only —
+     illustration next to documentary footage muddies what is a record and what
+     is a drawing. These prompts are kept out rather than commented in, because
+     a spec that is not generated is just a stale comment. */
 ];
