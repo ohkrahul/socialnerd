@@ -10,6 +10,7 @@
 import { sequelize } from "../lib/db.js";
 import "../lib/models/Subscriber.js";
 import "../lib/models/Event.js";
+import "../lib/models/GalleryItem.js";
 
 const [, , ...args] = process.argv;
 

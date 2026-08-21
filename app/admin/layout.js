@@ -34,6 +34,9 @@ export default async function AdminLayout({ children }) {
               <Link href="/admin" className="t-dim hover:text-ivory">
                 Events
               </Link>
+              <Link href="/admin/gallery" className="t-dim hover:text-ivory">
+                Gallery
+              </Link>
               <Link href="/admin/subscribers" className="t-dim hover:text-ivory">
                 Notify list
               </Link>
