@@ -1,10 +1,10 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { steps, topics } from "@/lib/content";
+import { steps, stepsClip, topics } from "@/lib/content";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
@@ -40,34 +40,46 @@ const icons = [
 export default function HowItWorks() {
   const root = useRef(null);
 
+  // Nothing downloads until the clip is near the viewport, and it stops the
+  // moment it leaves. Same handling as the gallery tiles: this sits well below
+  // the fold and should not cost anyone who never scrolls this far.
+  useEffect(() => {
+    const el = root.current?.querySelector("[data-steps-clip]");
+    if (!el) return;
+
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          if (!el.src) el.src = el.dataset.src;
+          el.play().catch(() => {});
+        } else {
+          el.pause();
+        }
+      },
+      { rootMargin: "160px 0px", threshold: 0.15 },
+    );
+
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
   useGSAP(
     () => {
-      // The dotted line is revealed by a growing clip rect, so it stays
-      // genuinely dotted while it draws. Animating dashoffset would slide the
-      // dashes along instead of extending the line.
-      gsap.to("[data-journey-clip]", {
-        attr: { width: 1000 },
-        ease: "none",
-        scrollTrigger: {
-          trigger: root.current,
-          start: "top 72%",
-          end: "bottom 78%",
-          scrub: 0.5,
-        },
-      });
-
-      // Each step lights up as the line reaches it.
-      gsap.utils.toArray("[data-step]").forEach((step, i) => {
+      /**
+       * Each step lights up as it arrives.
+       *
+       * Triggered on the step itself rather than on the section at a staggered
+       * offset. The offsets existed to time four dots against a horizontal line
+       * sweeping across them; stacked vertically each dot has its own scroll
+       * position, so the element is the honest trigger.
+       */
+      gsap.utils.toArray("[data-step]").forEach((step) => {
         gsap.to(step.querySelector("[data-step-dot]"), {
           backgroundColor: "var(--color-sage)",
           color: "var(--color-ink)",
           borderColor: "var(--color-sage)",
           duration: 0.5,
-          scrollTrigger: {
-            trigger: root.current,
-            start: `top ${65 - i * 7}%`,
-            once: true,
-          },
+          scrollTrigger: { trigger: step, start: "top 82%", once: true },
         });
       });
     },
@@ -97,54 +109,32 @@ export default function HowItWorks() {
           </p>
         </div>
 
-        {/* Journey line — desktop only; the mobile stack reads better without it */}
-        <div className="relative mt-20 hidden lg:block">
-          <svg
-            aria-hidden="true"
-            viewBox="0 0 1000 120"
-            preserveAspectRatio="none"
-            className="absolute -top-2 left-0 h-28 w-full"
-            fill="none"
-          >
-            <defs>
-              <clipPath id="journey-reveal">
-                <rect data-journey-clip x="0" y="0" width="0" height="120" />
-              </clipPath>
-            </defs>
-            <path
-              d="M115 60C240 12 262 108 375 60S512 12 625 60S762 108 885 60"
-              stroke="var(--color-ivory)"
-              strokeWidth="1.5"
-              strokeDasharray="1 9"
-              strokeLinecap="round"
-              vectorEffect="non-scaling-stroke"
-              opacity="0.22"
-            />
-            <g clipPath="url(#journey-reveal)">
-              <path
-                d="M115 60C240 12 262 108 375 60S512 12 625 60S762 108 885 60"
-                stroke="var(--color-sage)"
-                strokeWidth="1.5"
-                strokeDasharray="1 9"
-                strokeLinecap="round"
-                vectorEffect="non-scaling-stroke"
-              />
-            </g>
-          </svg>
-        </div>
+        {/* Steps beside the clip. As a row of four across the full width they
+            left the whole right half of the header empty and the clip had
+            nothing to sit against; stacked, four steps come out close to the
+            height of a 9:16 clip, so the two columns balance. */}
+        <div className="mt-16 grid grid-cols-1 items-start gap-x-16 gap-y-14 lg:grid-cols-12">
+          <ol className="lg:col-span-7">
+            {steps.map((step, i) => (
+              <li
+                key={step.title}
+                data-step
+                data-reveal={i * 0.08}
+                className="relative flex gap-6 pb-10 last:pb-0"
+              >
+                {/* Connector between this dot and the next. Vertical now: the
+                    row became a column, and the old horizontal sweep across it
+                    would have read as a broken graphic. */}
+                {i < steps.length - 1 && (
+                  <span
+                    aria-hidden="true"
+                    className="absolute top-14 left-6 -ml-px h-[calc(100%-2.5rem)] border-l border-dashed border-ivory/20"
+                  />
+                )}
 
-        <ol className="mt-14 grid grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 lg:mt-6 lg:grid-cols-4">
-          {steps.map((step, i) => (
-            <li
-              key={step.title}
-              data-step
-              data-reveal={i * 0.08}
-              className="relative"
-            >
-              <div className="flex items-center gap-4">
                 <span
                   data-step-dot
-                  className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-ivory/25 bg-transparent text-ivory"
+                  className="relative z-10 flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-ivory/25 bg-ink text-ivory"
                 >
                   <svg
                     viewBox="0 0 24 24"
@@ -159,18 +149,39 @@ export default function HowItWorks() {
                     {icons[i]}
                   </svg>
                 </span>
-                <span className="numeral t-faint text-2xl">
-                  0{i + 1}
-                </span>
-              </div>
 
-              <h3 className="display mt-6 text-[1.65rem]">{step.title}</h3>
-              <p className="t-dim mt-3 text-[0.9375rem] leading-relaxed">
-                {step.body}
-              </p>
-            </li>
-          ))}
-        </ol>
+                <div className="pt-0.5">
+                  <span className="numeral t-faint text-xl">0{i + 1}</span>
+                  <h3 className="display mt-1 text-[1.5rem]">{step.title}</h3>
+                  <p className="t-dim mt-2 text-[0.9375rem] leading-relaxed">
+                    {step.body}
+                  </p>
+                </div>
+              </li>
+            ))}
+          </ol>
+
+          <figure data-reveal="0.1" className="lg:col-span-5">
+            {/* Capped in width, not height: 9:16 at the full column width would
+                overshoot the steps beside it. */}
+            <div className="relative aspect-[9/16] w-full max-w-[26rem] overflow-hidden rounded-xl border border-ivory/12 bg-ink-deep lg:ml-auto">
+              <video
+                data-steps-clip
+                data-src={stepsClip.src}
+                poster={stepsClip.poster}
+                muted
+                loop
+                playsInline
+                preload="none"
+                aria-label={stepsClip.alt}
+                className="h-full w-full object-cover"
+              />
+            </div>
+            <figcaption className="t-faint mt-3 max-w-[26rem] text-[0.8125rem] lg:ml-auto">
+              {stepsClip.caption}
+            </figcaption>
+          </figure>
+        </div>
 
         {/* What actually comes up. A plain row rather than eight hover cards —
             the names are the information; the interaction was decoration. */}

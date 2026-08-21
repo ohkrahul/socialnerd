@@ -11,8 +11,10 @@ import Faq from "@/components/Faq";
 import FinalCta from "@/components/FinalCta";
 import Footer from "@/components/Footer";
 import StickyCta from "@/components/StickyCta";
+import WhatsappFloat from "@/components/WhatsappFloat";
 import { isSignedIn } from "@/lib/auth";
 import { getArchive, getEventForPreview, getFeaturedEvent } from "@/lib/events";
+import { getGallery, getPosters } from "@/lib/gallery";
 
 /**
  * Seven blocks, down from twelve, and weighted towards images over text.
@@ -46,9 +48,11 @@ export default async function Home({ searchParams }) {
       ? await getEventForPreview(previewEvent)
       : null;
 
-  const [featured, archive] = await Promise.all([
+  const [featured, archive, galleryItems, posterItems] = await Promise.all([
     preview ? Promise.resolve(preview) : getFeaturedEvent(),
     getArchive(),
+    getGallery(),
+    getPosters(),
   ]);
 
   return (
@@ -66,7 +70,7 @@ export default async function Home({ searchParams }) {
         <Hero />
         {featured && <NextConversation event={featured} />}
         <HowItWorks />
-        <Gallery />
+        <Gallery items={galleryItems} posters={posterItems} />
         <Rules />
         <PastEvents events={archive} />
         <Audience />
@@ -75,6 +79,7 @@ export default async function Home({ searchParams }) {
       </main>
       <Footer />
       <StickyCta event={featured} />
+      <WhatsappFloat />
     </>
   );
 }

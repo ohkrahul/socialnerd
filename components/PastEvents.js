@@ -20,16 +20,29 @@ function Poster({ event, index, total }) {
   return (
     <article>
       <div
-        className={`relative flex aspect-[3/4] flex-col justify-between overflow-hidden rounded-xl p-7 ${grounds[index % grounds.length]}`}
+        className={`relative flex aspect-[4/3] flex-col justify-between overflow-hidden rounded-xl p-7 ${grounds[index % grounds.length]}`}
       >
         {event.posterPath && (
-          // Served from Postgres; next/image would only add a proxy hop.
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={event.posterPath}
-            alt=""
-            className="absolute inset-0 h-full w-full object-cover opacity-30"
-          />
+          <>
+            {/* Served from Postgres; next/image would only add a proxy hop. */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={event.posterPath}
+              alt=""
+              className="absolute inset-0 h-full w-full object-cover"
+            />
+            {/* The photo used to run at 30% over the solid ground, which turned
+                every face the same shade of green. It now runs at full opacity:
+                the ground tints it instead of swallowing it, and a scrim carries
+                the copy. These are the only pictures of the actual rooms — they
+                should be legible. */}
+            <div
+              className={`absolute inset-0 mix-blend-multiply ${
+                index % 2 === 0 ? "bg-ink/35" : "bg-green/40"
+              }`}
+            />
+            <div className="absolute inset-0 bg-linear-to-t from-ink via-ink/70 via-50% to-ink/5" />
+          </>
         )}
 
         <svg
@@ -48,17 +61,19 @@ function Poster({ event, index, total }) {
           <span className="eyebrow opacity-60">{event.venueName}</span>
         </div>
 
+        {/* Title, question and date are one bottom-anchored block. As three
+            separate flex children the title was pushed to the middle of the
+            card, which is exactly where the faces are. */}
         <div className="relative">
           <h3 className="question text-[1.75rem]">{event.title}</h3>
           <div className="mt-4 h-px w-12 bg-current opacity-40" />
           {(event.memorableQuestion || event.subtitle) && (
-            <p className="mt-4 text-[0.875rem] leading-relaxed opacity-70">
+            <p className="mt-4 text-[0.875rem] leading-relaxed opacity-80">
               &ldquo;{event.memorableQuestion || event.subtitle}&rdquo;
             </p>
           )}
+          <p className="eyebrow mt-5 opacity-70">{event.shortDate}</p>
         </div>
-
-        <p className="eyebrow relative opacity-60">{event.shortDate}</p>
       </div>
 
       <div className="mt-4 flex items-baseline justify-between gap-4">
@@ -87,9 +102,13 @@ export default function PastEvents({ events = [] }) {
 
   return (
     <section id="archive" className="ground-deep relative py-(--spacing-section)">
+      {/* Stacked, not a 5/7 split. With two events the narrow column held a
+          three-line heading against a full-height card, leaving most of its
+          height empty; across the full width the cards also stop cropping
+          group photographs into portraits. */}
       {hasArchive && (
-        <div className="shell grid grid-cols-1 gap-x-16 gap-y-12 lg:grid-cols-12">
-          <div className="lg:col-span-5">
+        <div className="shell">
+          <div className="max-w-[38rem]">
             <p data-reveal className="eyebrow t-accent">
               The archive
             </p>
@@ -105,7 +124,7 @@ export default function PastEvents({ events = [] }) {
             </p>
           </div>
 
-          <div className="lg:col-span-7">
+          <div className="mt-16">
             <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2">
               {events.map((event, i) => (
                 <li key={event.meetupId} data-reveal={i * 0.08}>
@@ -121,10 +140,25 @@ export default function PastEvents({ events = [] }) {
         <ul className="grid grid-cols-2 gap-y-10 sm:grid-cols-3 lg:grid-cols-5">
           {stats.map((stat, i) => (
             <li key={stat.label} data-reveal={i * 0.05} className="text-center">
-              <span className="numeral block text-[clamp(2.1rem,3.6vw,2.9rem)]">
+              {/* The emphasised figure gets size and the accent colour, not
+                  font-weight: the display face ships at 400 only, so bolding it
+                  would just let the browser smear a synthetic weight. */}
+              <span
+                className={`numeral block ${
+                  stat.emphasis
+                    ? "t-accent text-[clamp(2.9rem,5vw,4rem)]"
+                    : "text-[clamp(2.1rem,3.6vw,2.9rem)]"
+                }`}
+              >
                 {stat.value}
               </span>
-              <span className="eyebrow t-faint mt-3 block">{stat.label}</span>
+              <span
+                className={`eyebrow mt-3 block ${
+                  stat.emphasis ? "t-fg font-extrabold" : "t-faint"
+                }`}
+              >
+                {stat.label}
+              </span>
             </li>
           ))}
         </ul>

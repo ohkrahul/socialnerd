@@ -160,9 +160,14 @@ export default function Hero() {
           className="edge flex flex-wrap items-center justify-center gap-x-5 gap-y-3 border-t pt-6"
         >
           {hero.indicators.map((item, i) => (
-            <li key={item} className="eyebrow t-faint flex items-center gap-5">
+            <li
+              key={item.label}
+              className={`eyebrow flex items-center gap-5 ${
+                item.emphasis ? "t-fg font-extrabold" : "t-faint"
+              }`}
+            >
               {i > 0 && <span className="h-1 w-1 rounded-full bg-sage" />}
-              {item}
+              {item.label}
             </li>
           ))}
         </ul>

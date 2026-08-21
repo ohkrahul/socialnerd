@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useRef } from "react";
-import { gallery } from "@/lib/content";
+import PosterRail from "./PosterRail";
 
 /**
  * Masonry gallery. Uneven spans on purpose — a tidy grid reads as a template,
@@ -17,9 +17,20 @@ import { gallery } from "@/lib/content";
  *   poster  their own event artwork, shown as artwork rather than as a photo
  */
 
+/**
+ * Aspect only — no grid spans. Each tile keeps the shape of its source: the
+ * landscape clips are 16:9 once their letterboxing is stripped, the portrait
+ * ones are 9:16, and forcing either into a common tile crops the people out.
+ *
+ * That mix is why this is a column layout rather than a grid. A 9:16 tile is
+ * three times the height of a 16:9 tile at the same width, so in a row-based
+ * grid the short ones leave a hole beneath them and the section reads as a
+ * cross. Columns flow each tile under the last one in its column, so ragged
+ * heights cost nothing and no tile can leave a gap.
+ */
 const spans = {
-  tall: "sm:row-span-2 aspect-[3/4]",
-  wide: "sm:col-span-2 aspect-[16/10]",
+  tall: "aspect-[9/16]",
+  wide: "aspect-[16/9]",
   normal: "aspect-[4/3]",
 };
 
@@ -34,11 +45,14 @@ const tilts = [
 const zoom =
   "transition-transform duration-[1.4s] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.05]";
 
+/** Cloudinary already did f_auto,q_auto; a second optimizer pass is waste. */
+const isRemote = (src) => /^https?:\/\//.test(src);
+
 function Tile({ item, index }) {
   return (
     <figure
       data-reveal={(index % 3) * 0.08}
-      className={`group relative overflow-hidden rounded-xl border border-ivory/12 ${spans[item.span]} ${tilts[index % tilts.length]}`}
+      className={`group relative mb-4 break-inside-avoid overflow-hidden rounded-xl border border-ivory/12 sm:mb-5 ${spans[item.span]} ${tilts[index % tilts.length]}`}
     >
       {item.type === "video" ? (
         <video
@@ -57,6 +71,7 @@ function Tile({ item, index }) {
           src={item.src}
           alt={item.caption}
           fill
+          unoptimized={isRemote(item.src)}
           sizes="(max-width: 640px) 100vw, 45vw"
           className={`${zoom} ${
             // A poster is artwork with its own margins; letting it fill the tile
@@ -68,14 +83,17 @@ function Tile({ item, index }) {
         />
       )}
 
-      <figcaption className="absolute inset-x-0 bottom-0 bg-linear-to-t from-ink/85 to-transparent p-5 pt-14 text-[0.8125rem] font-medium text-ivory/90">
+      {/* These sit over real photographs that are bright in places, so the
+          scrim holds most of its opacity through the text band and only fades
+          above it. At 85%-to-transparent the first line was competing. */}
+      <figcaption className="absolute inset-x-0 bottom-0 bg-linear-to-t from-ink via-ink/75 via-55% to-transparent p-5 pt-16 text-[0.8125rem] font-medium text-ivory">
         {item.caption}
       </figcaption>
     </figure>
   );
 }
 
-export default function Gallery() {
+export default function Gallery({ items = [], posters = [] }) {
   const root = useRef(null);
 
   // Video is the heaviest thing here. Nothing downloads until its tile is on
@@ -123,12 +141,14 @@ export default function Gallery() {
           </p>
         </div>
 
-        <div className="mt-16 grid grid-cols-1 gap-4 sm:grid-cols-3 sm:gap-5">
-          {gallery.map((item, i) => (
+        <div className="mt-16 gap-4 [column-fill:balance] sm:gap-5 columns-1 sm:columns-2 lg:columns-3">
+          {items.map((item, i) => (
             <Tile key={item.caption} item={item} index={i} />
           ))}
         </div>
       </div>
+
+      <PosterRail items={posters} />
     </section>
   );
 }

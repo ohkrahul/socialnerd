@@ -4,7 +4,8 @@ import { useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { nav } from "@/lib/content";
+import Image from "next/image";
+import { nav, siteMeta } from "@/lib/content";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
@@ -32,11 +33,20 @@ export default function Nav() {
         }`}
       >
         <div className="shell flex items-center justify-between gap-8">
-          <a
-            href="#top"
-            className="display text-ivory text-2xl leading-none tracking-tight"
-          >
-            Social Nerds<span className="text-sage">.</span>
+          <a href="#top" className="flex items-center gap-3">
+            {/* Their own mark. Kept alongside the wordmark rather than replacing
+                it: the logo is a dark green square, so on this nav it reads as a
+                shape rather than as the name. */}
+            <Image
+              src={siteMeta.logo}
+              alt=""
+              width={40}
+              height={40}
+              className="h-10 w-10 shrink-0 rounded-lg"
+            />
+            <span className="display text-ivory text-2xl leading-none tracking-tight">
+              Social Nerds<span className="text-sage">.</span>
+            </span>
           </a>
 
           <nav className="hidden items-center gap-9 lg:flex" aria-label="Main">
@@ -53,6 +63,18 @@ export default function Nav() {
           </nav>
 
           <div className="flex items-center gap-3">
+            {/* Live proof, not decoration: the count is the one number that makes
+                an empty-looking community read as a real one. */}
+            <a
+              href={siteMeta.meetupUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hidden items-center gap-2 rounded-full border border-ivory/20 px-3.5 py-2 text-[0.8125rem] text-ivory/75 transition-colors hover:border-ivory/45 hover:text-ivory xl:inline-flex"
+            >
+              <span className="h-1.5 w-1.5 rounded-full bg-sage" />
+              <span className="font-extrabold text-ivory">{siteMeta.members}</span>
+              members
+            </a>
             <a href="#top" className="btn btn-ivory hidden md:inline-flex">
               Join the Next Conversation
             </a>
@@ -77,8 +99,17 @@ export default function Nav() {
       >
         <div className="shell flex h-full flex-col py-6">
           <div className="flex items-center justify-between">
-            <span className="display text-ivory text-2xl">
-              Social Nerds<span className="text-sage">.</span>
+            <span className="flex items-center gap-3">
+              <Image
+                src={siteMeta.logo}
+                alt=""
+                width={40}
+                height={40}
+                className="h-10 w-10 shrink-0 rounded-lg"
+              />
+              <span className="display text-ivory text-2xl">
+                Social Nerds<span className="text-sage">.</span>
+              </span>
             </span>
             <button
               type="button"
@@ -106,10 +137,14 @@ export default function Nav() {
             ))}
           </nav>
 
+          <p className="eyebrow t-faint mt-auto mb-4 text-center">
+            <span className="font-extrabold text-ivory">{siteMeta.members}</span>{" "}
+            members · ₹{siteMeta.fee} a seat
+          </p>
           <a
             href="#top"
             onClick={() => setOpen(false)}
-            className="btn btn-ivory mt-auto justify-center"
+            className="btn btn-ivory justify-center"
           >
             Join the Next Conversation
           </a>

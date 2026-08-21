@@ -6,7 +6,9 @@ const groups = [
     links: [
       { label: "Instagram", href: social.instagram },
       { label: "Meetup", href: social.meetup },
-      { label: "WhatsApp", href: social.whatsapp },
+      { label: "WhatsApp Channel", href: social.whatsappChannel },
+      { label: `Chat ${siteMeta.whatsapp}`, href: social.whatsapp },
+      { label: `Chat ${siteMeta.whatsappAlt}`, href: social.whatsappAlt },
     ],
   },
   {

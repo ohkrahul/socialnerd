@@ -79,13 +79,19 @@ export default function FinalCta() {
                 {finalCta.whatsappCta.label}
               </a>
             </Magnetic>
+            {/* A text link, not a second pill. Two ghost buttons of equal
+                weight read as a choice between equals and pulled attention off
+                the email field, which is the actual ask here. */}
             <a
               href={finalCta.secondaryCta.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="btn btn-ghost-light"
+              className="group t-dim text-[0.9375rem] font-medium underline decoration-ivory/25 decoration-1 underline-offset-4 transition-colors hover:text-ivory hover:decoration-ivory/60"
             >
               {finalCta.secondaryCta.label}
+              <span className="ml-1.5 inline-block transition-transform duration-500 group-hover:translate-x-1">
+                →
+              </span>
             </a>
           </div>
         </div>
