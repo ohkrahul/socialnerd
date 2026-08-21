@@ -117,9 +117,27 @@ export default function Motion() {
     const onLoad = () => ScrollTrigger.refresh();
     window.addEventListener("load", onLoad);
 
+    // The load event alone is not enough. Images and video decoding after it,
+    // a font swap, or an edit in dev all change document height while
+    // ScrollTrigger still holds the old positions — every reveal below the
+    // stale point never fires and its element sits at opacity 0 forever. That
+    // is what left the gallery blank. One observer catches all of those causes;
+    // the rAF gate stops a refresh that itself changes height from looping.
+    let queued = false;
+    const ro = new ResizeObserver(() => {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(() => {
+        queued = false;
+        ScrollTrigger.refresh();
+      });
+    });
+    ro.observe(document.body);
+
     return () => {
       document.removeEventListener("click", onAnchorClick);
       window.removeEventListener("load", onLoad);
+      ro.disconnect();
       gsap.ticker.remove(raf);
       ctx.revert();
       lenis.destroy();

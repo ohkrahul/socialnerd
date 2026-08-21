@@ -17,7 +17,7 @@ function Column({ data, tone }) {
           <li key={item} className="flex gap-4 text-[0.9375rem] leading-relaxed">
             <svg
               viewBox="0 0 24 24"
-              className={`mt-0.5 h-5 w-5 shrink-0 ${good ? "text-green" : "text-ink/35"}`}
+              className={`mt-0.5 h-5 w-5 shrink-0 ${good ? "text-green" : "text-ink/60"}`}
               fill="none"
               stroke="currentColor"
               strokeWidth="1.5"
@@ -26,7 +26,10 @@ function Column({ data, tone }) {
             >
               {good ? <path d="M5 12.5l4.5 4.5L19 7" /> : <path d="M7 7l10 10M17 7L7 17" />}
             </svg>
-            <span className={good ? "text-ink/80" : "text-ink/55"}>{item}</span>
+            {/* Both columns read at the same weight. Dimming this one measured
+                2.92:1 and, worse, made an equally true list look disabled. The
+                icon carries the distinction; opacity should not. */}
+            <span className="text-ink/80">{item}</span>
           </li>
         ))}
       </ul>

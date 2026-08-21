@@ -367,7 +367,9 @@ details[open] .plus-v {
 .ground-sand {
   --fg: var(--color-ink);
   --fg-dim: color-mix(in srgb, var(--color-ink) 72%, transparent);
-  --fg-faint: color-mix(in srgb, var(--color-ink) 48%, transparent);
+  /* 48% measured 2.56:1 on ivory. 72% is the lowest that clears AA on all
+     three light grounds (ivory, paper, sand). */
+  --fg-faint: color-mix(in srgb, var(--color-ink) 72%, transparent);
   --edge: color-mix(in srgb, var(--color-ink) 14%, transparent);
   --accent: var(--color-green);
   color: var(--fg);
