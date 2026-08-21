@@ -1,26 +1,332 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ---------------------------------------------------------------
+   Social Nerds — design tokens
+   Palette is fixed by the brand brief. Two values are derived:
+   --color-ink-deep (one step below ink, for layering dark sections)
+   --color-paper    (card ground; brief forbids pure white)
+   --------------------------------------------------------------- */
+@theme {
+  --color-ink: #2a3b2f;
+  --color-ink-deep: #1e2b22;
+  --color-green: #3e6b4a;
+  --color-sage: #6f9a73;
+  --color-ivory: #f9f1df;
+  --color-sand: #e2cfa9;
+  --color-paper: #fefaf0;
+
+  --font-display: var(--font-instrument-serif), ui-serif, Georgia, serif;
+  --font-body: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
+
+  /* Editorial rhythm. Sections breathe; nothing is cramped. */
+  --spacing-section: clamp(5rem, 11vw, 11rem);
+  --spacing-gutter: clamp(1.25rem, 5vw, 5rem);
+
+  --ease-editorial: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ---------------------------------------------------------------
+   Base
+   --------------------------------------------------------------- */
+html {
+  /* Lenis drives scrolling; native smooth would fight it. */
+  scroll-behavior: auto;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color-ivory);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  font-size: clamp(1rem, 0.97rem + 0.16vw, 1.0625rem);
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+::selection {
+  background-color: var(--color-sage);
+  color: var(--color-ivory);
+}
+
+/* Keyboard focus stays visible everywhere. Quality floor, not a feature. */
+:focus-visible {
+  outline: 2px solid var(--color-sage);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* ---------------------------------------------------------------
+   Paper grain — the whole page sits on stock, not on a screen.
+   One fixed overlay rather than a texture per section.
+   --------------------------------------------------------------- */
+.grain::after {
+  content: "";
+  position: fixed;
+  inset: -50%;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.28;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+  will-change: transform;
+}
+
+/* ---------------------------------------------------------------
+   Type roles
+   --------------------------------------------------------------- */
+.display {
+  font-family: var(--font-display);
+  font-weight: 400;
+  line-height: 0.94;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.numeral {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+/* Sage italic is the emphasis voice, used only on key phrases. */
+.accent {
+  font-style: italic;
+  color: var(--color-sage);
+}
+
+/* ---------------------------------------------------------------
+   Layout
+   --------------------------------------------------------------- */
+.shell {
+  width: 100%;
+  max-width: 90rem;
+  margin-inline: auto;
+  padding-inline: var(--spacing-gutter);
+}
+
+.rule {
+  height: 1px;
+  background-color: color-mix(in srgb, var(--color-ink) 16%, transparent);
+}
+
+/* ---------------------------------------------------------------
+   Scroll reveal — set by JS once GSAP takes over. Elements start
+   hidden ONLY if JS is running, so no-JS still reads the page.
+   --------------------------------------------------------------- */
+[data-reveal] {
+  opacity: 1;
+}
+
+html.anim [data-reveal] {
+  opacity: 0;
+  transform: translate3d(0, 1.75rem, 0);
+}
+
+html.anim [data-mask] > * {
+  transform: translate3d(0, 105%, 0);
+}
+
+[data-mask],
+[data-hero-mask] {
+  overflow: hidden;
+  display: block;
+}
+
+/* The hero runs its own orchestrated load sequence rather than the generic
+   scroll reveal, so it gets its own pre-paint hidden state. */
+html.anim [data-hero-mask] > * {
+  transform: translate3d(0, 110%, 0);
+}
+
+html.anim [data-hero-fade] {
+  opacity: 0;
+  transform: translate3d(0, 1.25rem, 0);
+}
+
+/* ---------------------------------------------------------------
+   Magnetic buttons
+   --------------------------------------------------------------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.9375rem 1.75rem;
+  border-radius: 999px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  white-space: nowrap;
+  min-height: 44px;
+  transition: background-color 0.4s var(--ease-editorial),
+    color 0.4s var(--ease-editorial), border-color 0.4s var(--ease-editorial);
+}
+
+.btn-solid {
+  background-color: var(--color-ink);
+  color: var(--color-ivory);
+}
+.btn-solid:hover {
+  background-color: var(--color-green);
+}
+
+.btn-ivory {
+  background-color: var(--color-ivory);
+  color: var(--color-ink);
+}
+.btn-ivory:hover {
+  background-color: var(--color-sand);
+}
+
+.btn-ghost {
+  border: 1px solid color-mix(in srgb, var(--color-ink) 28%, transparent);
+  color: var(--color-ink);
+}
+.btn-ghost:hover {
+  border-color: var(--color-ink);
+  background-color: color-mix(in srgb, var(--color-sand) 45%, transparent);
+}
+
+.btn-ghost-light {
+  border: 1px solid color-mix(in srgb, var(--color-ivory) 32%, transparent);
+  color: var(--color-ivory);
+}
+.btn-ghost-light:hover {
+  border-color: var(--color-ivory);
+  background-color: color-mix(in srgb, var(--color-ivory) 10%, transparent);
+}
+
+/* ---------------------------------------------------------------
+   Cards — thin border, small radius. Deliberately not SaaS-round.
+   --------------------------------------------------------------- */
+.card {
+  background-color: var(--color-paper);
+  border: 1px solid color-mix(in srgb, var(--color-ink) 14%, transparent);
+  border-radius: 10px;
+}
+
+/* ---------------------------------------------------------------
+   Horizontal rails — native scroll-snap beats a JS carousel on touch
+   --------------------------------------------------------------- */
+.rail {
+  display: flex;
+  gap: 1.25rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  padding-inline: var(--spacing-gutter);
+}
+.rail::-webkit-scrollbar {
+  display: none;
+}
+.rail > * {
+  scroll-snap-align: start;
+  flex: 0 0 auto;
+}
+
+/* ---------------------------------------------------------------
+   Accessibility: honour reduced motion by disabling the machinery,
+   not just shortening it.
+   --------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  html.anim [data-reveal],
+  html.anim [data-hero-fade],
+  html.anim [data-hero-mask] > *,
+  html.anim [data-mask] > * {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .grain::after {
+    animation: none !important;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ---------------------------------------------------------------
+   Morphing bubble — the question generator's backdrop. A CSS
+   border-radius loop instead of a paid MorphSVG licence.
+   --------------------------------------------------------------- */
+.morph {
+  border-radius: 62% 38% 44% 56% / 52% 48% 52% 48%;
+  filter: blur(2px);
+  animation: morph 22s ease-in-out infinite;
+}
+
+@keyframes morph {
+  0%,
+  100% {
+    border-radius: 62% 38% 44% 56% / 52% 48% 52% 48%;
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  33% {
+    border-radius: 40% 60% 63% 37% / 41% 58% 42% 59%;
+    transform: translate(-50%, -50%) rotate(4deg);
+  }
+  66% {
+    border-radius: 55% 45% 33% 67% / 63% 34% 66% 37%;
+    transform: translate(-50%, -50%) rotate(-3deg);
+  }
+}
+
+/* The grain drifts almost imperceptibly under the closing section. */
+.grain-drift::after {
+  animation: drift 40s linear infinite alternate;
+}
+
+@keyframes drift {
+  to {
+    transform: translate3d(2%, -2%, 0);
+  }
+}
+
+/* Accordion: rotate the plus into a minus without a second icon. */
+details[open] .plus-v {
+  transform: scaleY(0) rotate(90deg);
+}
+.plus-v {
+  transition: transform 0.45s var(--ease-editorial);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .morph,
+  .grain-drift::after {
+    animation: none !important;
+  }
+}
+
+/* ---------------------------------------------------------------
+   FAQ accordion. Native <details> keeps the keyboard and screen
+   reader behaviour for free; ::details-content animates the open
+   where the browser supports it and snaps where it doesn't.
+   --------------------------------------------------------------- */
+@supports selector(details::details-content) {
+  details.faq {
+    interpolate-size: allow-keywords;
+  }
+  details.faq::details-content {
+    height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: height 0.5s var(--ease-editorial), opacity 0.4s var(--ease-editorial),
+      content-visibility 0.5s allow-discrete;
+  }
+  details.faq[open]::details-content {
+    height: auto;
+    opacity: 1;
+  }
 }
